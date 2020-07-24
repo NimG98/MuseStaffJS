@@ -104,3 +104,10 @@ function getNoteDotImage(note) {
     const noteDotImgSrc = noteShapeDotComponent;
     noteDotImg.setAttribute("src", noteDotImgSrc);
 }
+
+
+class Rest extends Note {
+    constructor(noteUnit, dotted=false) {
+        super("rest", noteUnit, dotted=false)
+    }
+}
