@@ -1,7 +1,7 @@
 /* JS Library */
 "use strict";
 
-class StaffRow {
+class Measure {
     constructor() {
         this.notes = [[]];
         this.clef = "treble";
@@ -33,11 +33,11 @@ class StaffRow {
     }
 
     /* Creates a Staff that is one line*/
-    createStaffRow(notes) {
+    createMeasure(notes) {
         // for now, number of supported notes is 15 (rows=15)
         const numOfNoteRows = 15;
         const staff = document.createElement('table');
-        staff.setAttribute('class', 'museStaffRow');
+        staff.setAttribute('class', 'museMeasure');
         const staffTbody = document.createElement('tbody');
         staff.appendChild(staffTbody);
 

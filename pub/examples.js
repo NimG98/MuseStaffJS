@@ -1,5 +1,5 @@
 "use strict";
 
-const staff = new StaffRow();
+const staff = new Measure();
 const body = document.querySelector('body')
-body.appendChild(staff.createStaffRow([]));
+body.appendChild(staff.createMeasure([]));
