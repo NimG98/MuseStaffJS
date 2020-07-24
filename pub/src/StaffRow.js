@@ -37,7 +37,7 @@ class StaffRow {
         // for now, number of supported notes is 15 (rows=15)
         const numOfNoteRows = 15;
         const staff = document.createElement('table');
-        staff.setAttribute('class', 'staffRow');
+        staff.setAttribute('class', 'museStaffRow');
         const staffTbody = document.createElement('tbody');
         staff.appendChild(staffTbody);
 
@@ -49,7 +49,7 @@ class StaffRow {
 
             if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
                 const line = document.createElement('div');
-                line.setAttribute('class', 'staffLine');
+                line.setAttribute('class', 'museStaffLine');
                 noteRow.appendChild(line);
             }
 

@@ -1,68 +1,80 @@
 export const noteDirection = {
     B3: {
-        stemUpwards: true,
-        line: "end"
+        stemDownwards: false,
+        line: {
+            start: "end",
+            numOfLines: 1
+        }
     },
     C4: {
-        stemUpwards: true,
-        line: "middle"
+        stemDownwards: false,
+        line: {
+            start: "middle",
+            numOfLines: 1
+        }
     },
     D4: {
-        stemUpwards: true,
+        stemDownwards: false,
         line: null
     },
     E4: {
-        stemUpwards: true,
+        stemDownwards: false,
         line: null
     },
     F4: {
-        stemUpwards: true,
+        stemDownwards: false,
         line: null
     },
     G4: {
-        stemUpwards: true,
+        stemDownwards: false,
         line: null
     },
     A4: {
-        stemUpwards: true,
+        stemDownwards: false,
         line: null
     },
     B4: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     C5: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     D5: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     E5: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     F5: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     G5: {
-        stemUpwards: false,
+        stemDownwards: true,
         line: null
     },
     A5: {
-        stemUpwards: false,
-        line: "middle"
+        stemDownwards: true,
+        line: {
+            start: "middle",
+            numOfLines: 1
+        }
     },
     B5: {
-        stemUpwards: false,
-        line: "end"
+        stemDownwards: true,
+        line: {
+            start: "end",
+            numOfLines: 1
+        }
     }
 }
 
 
-export const noteShapeByUnit = {
+export const noteShapeByUnitValue = {
     note: {
         whole: {
             image: "../static/note-whole.png",
@@ -79,11 +91,11 @@ export const noteShapeByUnit = {
         },
         eighth: {
             image: "../static/note-eighth.png",
-            stemUpwards: "../static/note-eighth-down.png"
+            stemDownwards: "../static/note-eighth-down.png"
         },
         sixteenth: {
             image: "../static/note-sixteenth.png",
-            stemUpwards: "../static/note-sixteenth-down.png"
+            stemDownwards: "../static/note-sixteenth-down.png"
         }
     },
     rest: {
