@@ -74,7 +74,7 @@ export const noteDirection = {
 }
 
 
-export const noteShapeByUnitValue = {
+export const noteShapeByUnit = {
     note: {
         whole: {
             image: "../static/note-whole.png",

@@ -20,9 +20,9 @@ class StaffRow {
         this.clef = clefType;
     }
 
-    setTimeSig(beatsPerMeasure, beatUnitValue) {
+    setTimeSig(beatsPerMeasure, beatUnit) {
         try {
-            this.timeSig = TimeSignature(beatsPerMeasure, beatUnitValue);
+            this.timeSig = TimeSignature(beatsPerMeasure, beatUnit);
         } catch {
             alert("Please input a correct time signature.")
         }
@@ -41,7 +41,7 @@ class StaffRow {
         const staffTbody = document.createElement('tbody');
         staff.appendChild(staffTbody);
 
-        const numOfNoteColumns = calculateNumOfMeasureNoteColumns(this.timeSig.beatsPerMeasure,this.timeSig.beatUnitValue);
+        const numOfNoteColumns = calculateNumOfMeasureNoteColumns(this.timeSig.beatsPerMeasure,this.timeSig.beatUnit);
 
         for(var i = 0; i < numOfNoteRows; i++) {
             const noteRow = document.createElement('tr');
@@ -66,18 +66,18 @@ class StaffRow {
 }
 
 
-/* Splits up the measure into the max number of columns according to the beat value of the min supported note.
+/* Splits up the measure into the max number of columns according to the beat unit of the min supported note.
 
     I.e. If the 16th note is the min supported note, and the measure has a time signature of 4/4,
     then a measure is composed of 16 columns.
 
 */
-function calculateNumOfMeasureNoteColumns(beatsPerMeasure, beatUnitValue) {
-    const toMultiply = 4/beatUnitValue;
+function calculateNumOfMeasureNoteColumns(beatsPerMeasure, beatUnit) {
+    const toMultiply = 4/beatUnit;
     if (toMultiply === 1) {
-        return (beatsPerMeasure*beatUnitValue);
+        return (beatsPerMeasure*beatUnit);
     } else {
-        return (beatsPerMeasure*beatUnitValue)*(2*toMultiply);
+        return (beatsPerMeasure*beatUnit)*(2*toMultiply);
     }
 }
 

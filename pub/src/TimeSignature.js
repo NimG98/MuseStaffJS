@@ -1,21 +1,21 @@
 class TimeSignature {
-    constructor(beatsPerMeasure, beatUnitValue) {
-        if(this.validateTimeSignature(beatsPerMeasure, beatUnitValue)){
+    constructor(beatsPerMeasure, beatUnit) {
+        if(validateTimeSignature(beatsPerMeasure, beatUnit)){
             this.beatsPerMeasure = beatsPerMeasure;
-            this.beatUnitValue = beatUnitValue;
+            this.beatUnit = beatUnit;
         } else {
             throw new Error("Invalid time signature");
         }
     }
 }
 
-TimeSignature.prototype.validateTimeSignature = (beatsPerMeasure, beatUnitValue) => {
+function validateTimeSignature(beatsPerMeasure, beatUnit) {
     /* possibleBeatsPerMeasure = Array.from(new Array(64), (x, i) => i + 1); // [1, 2, 3, 4, 5, ..., 64]
-    possibleBeatUnitValues = [1, 2, 4, 8, 16, 32, 64]; */
+    possibleBeatUnits = [1, 2, 4, 8, 16, 32, 64]; */
 
     // Using up to max 16 beats and notes for now
     const possibleBeatsPerMeasure = Array.from(new Array(16), (x, i) => i + 1); // [1, 2, 3, 4, 5, ..., 16]
-    const possibleBeatUnitValues = [1, 2, 4, 8, 16];
+    const possibleBeatUnits = [1, 2, 4, 8, 16];
     
-    return possibleBeatsPerMeasure.includes(beatsPerMeasure) && possibleBeatUnitValues.includes(beatUnitValue);
+    return possibleBeatsPerMeasure.includes(beatsPerMeasure) && possibleBeatUnits.includes(beatUnit);
 }
