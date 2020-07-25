@@ -1,4 +1,4 @@
-export const noteDirection = {
+const noteDirection = {
     B3: {
         stemDownwards: false,
         line: {
@@ -74,7 +74,7 @@ export const noteDirection = {
 }
 
 
-export const noteShapeByUnit = {
+const noteShapeByUnit = {
     note: {
         whole: {
             image: "../static/note-whole.png",
@@ -117,9 +117,9 @@ export const noteShapeByUnit = {
     }
 }
 
-export const noteShapeLineComponent = {
+const noteShapeLineComponent = {
     end: "../static/note-line-top.png",
     middle: "../static/note-line-middle.png"
 }
 
-export const noteShapeDotComponent = "../static/note-dot.png"
+const noteShapeDotComponent = "../static/note-dot.png"

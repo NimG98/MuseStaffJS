@@ -1,4 +1,4 @@
-import {noteDirection, noteShapeByUnit, noteShapeLineComponent, noteShapeDotComponent} from './constants/noteShapes';
+// import {noteDirection, noteShapeByUnit, noteShapeLineComponent, noteShapeDotComponent} from './constants/noteShapes';
 
 
 class Note {

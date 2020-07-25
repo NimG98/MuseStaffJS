@@ -1,3 +1,35 @@
+.museStaffNote {
+    position: relative;
+}
+
+.museStaffNoteImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index:0;
+}
+
+.museStaffNoteLineImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index:100;
+}
+
+.museStaffNoteDotImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index:100;
+}
+
 .rotate180 {
-    
+    transform: rotate(180deg) translate(-100%, -100%);
+    -webkit-transform: rotate(180deg) translate(-100%, -100%);
+    -ms-transform: rotate(180deg) translateX(-100%, -100%);
+}
+
+.vertReflect {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
 }

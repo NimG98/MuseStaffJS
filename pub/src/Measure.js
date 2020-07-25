@@ -1,15 +1,22 @@
 /* JS Library */
 "use strict";
 
+// import {noteDirection} from './constants/noteShapes';
+
+
 class Measure {
     constructor() {
-        this.notes = [[]];
+        this.notes = [];
         this.clef = "treble";
         this.timeSig = new TimeSignature(4, 4);
-
+        //this.measure = createMeasure(this.timeSig.beatsPerMeasure,this.timeSig.beatUnit);
         this.lyrics = [];
         // this.editable = false;
         // this.playable = false;
+        this.pointer = {
+            visible: false,
+            position: 0
+        }
     }
 
     setNotes(notes) {
@@ -32,36 +39,38 @@ class Measure {
         this.lyrics = lyrics;
     }
 
-    /* Creates a Staff that is one line*/
-    createMeasure(notes) {
-        // for now, number of supported notes is 15 (rows=15)
-        const numOfNoteRows = 15;
-        const staff = document.createElement('table');
-        staff.setAttribute('class', 'museMeasure');
-        const staffTbody = document.createElement('tbody');
-        staff.appendChild(staffTbody);
+    setPointerPosition(noteNumberIndex) {
+        const oldPointerNote = this.notes[this.pointer.position];
+        const oldPointerNoteRowIndex = Object.keys(noteDirection).reverse().indexOf(oldPointerNote.noteValue);
 
-        const numOfNoteColumns = calculateNumOfMeasureNoteColumns(this.timeSig.beatsPerMeasure,this.timeSig.beatUnit);
+        
 
-        for(var i = 0; i < numOfNoteRows; i++) {
-            const noteRow = document.createElement('tr');
-            staffTbody.appendChild(noteRow);
+        //document.querySelector('museMeasure').querySelectorAll('tr')[oldPointerNoteRowIndex].querySelectorAll('td')[this.pointer.position]
 
-            if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
-                const line = document.createElement('div');
-                line.setAttribute('class', 'museStaffLine');
-                noteRow.appendChild(line);
-            }
 
-            for(var j = 0; j < numOfNoteColumns; j++) {
-                const noteColumn = document.createElement('td');
-                noteColumn.addEventListener('click', addNoteToStaff)
-                noteRow.appendChild(noteColumn);
-                // noteColumn.style.backgroundColor = "Aqua";
-            }
+        this.pointer.position = noteNumberIndex;
+
+        
+    }
+
+    addNoteAtCurrentPosition(note) {
+        const columnsToTakeUp = noteUnitMinEquivalents[note.noteUnit];
+        var noteRowIndex;
+        if(note.noteType === "note") {
+            noteRowIndex = Object.keys(noteDirection).reverse().indexOf(note.noteValue);
+        }
+        // for rest notes, place in middle line of staff measure (8th row)
+        else {
+            noteRowIndex = 8;
         }
 
-        return staff;
+        const noteImage = note.createNoteImage();
+
+        if(this.notes[this.pointer.position]) {
+            noteImage.addEventListener('click', onNoteClick);
+        }
+
+
     }
 }
 
@@ -81,7 +90,57 @@ function calculateNumOfMeasureNoteColumns(beatsPerMeasure, beatUnit) {
     }
 }
 
-function addNoteToStaff(e) {
-    e.preventDefault();
+/* Creates a Measure */
+function createMeasure(beatsPerMeasure, beatUnit) {
+    // for now, number of supported notes is 15 (rows=15)
+    const numOfNoteRows = 15;
+    const measure = document.createElement('table');
+    measure.setAttribute('class', 'museMeasure');
+    const measureTbody = document.createElement('tbody');
+    measure.appendChild(measureTbody);
+
+    const numOfNoteColumns = calculateNumOfMeasureNoteColumns(beatsPerMeasure, beatUnit);
+
+    for(var i = 0; i < numOfNoteRows+1; i++) {
+        const noteRow = document.createElement('tr');
+        measureTbody.appendChild(noteRow);
+        // last row for the pointer
+        if(i === 16) {
+            noteRow.setAttribute('class', 'museMeasurePointerContainer');
+            const pointerImg = document.createElement('img');
+            pointerImg.setAttribute("class", "museMeasurePointerImage")
+        } else {
+            noteRow.addEventListener('click', clickNoteToAddToMeasure)
+        }
+        // note rows with staff lines
+        if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
+            const line = document.createElement('div');
+            line.setAttribute('class', 'museMeasureLine');
+            noteRow.appendChild(line);
+        }
+
+        for(var j = 0; j < numOfNoteColumns; j++) {
+            const noteColumn = document.createElement('td');
+            noteRow.appendChild(noteColumn);
+        }
+    }
+
+    return measure;
 }
 
+function clickNoteToAddToMeasure(e) {
+    e.preventDefault();
+
+    const noteRowIndex = this.rowIndex;
+    const notesBasedOnRow = Object.keys(noteDirection).reverse();
+    const noteValue = notesBasedOnRow[noteRowIndex];
+}
+
+
+
+function onNoteClick(e) {
+    // td column number of note
+    const noteNumberIndex = this.parentNode.cellIndex
+    this.setAttribute("class", this.className + " highlighted");
+    setPointerPosition(noteNumberIndex);
+}
