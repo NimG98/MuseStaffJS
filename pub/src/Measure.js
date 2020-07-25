@@ -9,13 +9,13 @@ class Measure {
         this.notes = [];
         this.clef = "treble";
         this.timeSig = new TimeSignature(4, 4);
-        //this.measure = createMeasure(this.timeSig.beatsPerMeasure,this.timeSig.beatUnit);
+        this.measure = createMeasure(this.timeSig.beatsPerMeasure,this.timeSig.beatUnit);
         this.lyrics = [];
         // this.editable = false;
         // this.playable = false;
         this.pointer = {
             visible: false,
-            position: 0
+            position: null
         }
     }
 
@@ -40,17 +40,28 @@ class Measure {
     }
 
     setPointerPosition(noteNumberIndex) {
-        const oldPointerNote = this.notes[this.pointer.position];
-        const oldPointerNoteRowIndex = Object.keys(noteDirection).reverse().indexOf(oldPointerNote.noteValue);
+        // remove pointer and highlight from old note that was pointed on
+        if(this.pointer.position) {
+            // remove highlight from old note
+            const oldPointerPosition = this.pointer.position;
+            const oldNotePointedOn = this.notes[oldPointerPosition];
+            const oldNotePointedOnRowIndex = Object.keys(noteDirection).reverse().indexOf(oldNotePointedOn.noteValue);
+            const oldNotePointedOnContainer = this.measure.rows[oldNotePointedOnRowIndex].cells[oldPointerPosition].querySelector('.highlighted');
+            //bad -> document.querySelector('.museMeasure').querySelectorAll('tr')[oldPointerNoteRowIndex].querySelectorAll('td')[oldPointerPosition]
+            oldNotePointedOnContainer.setAttribute('class', "museStaffNote");
 
-        
-
-        //document.querySelector('museMeasure').querySelectorAll('tr')[oldPointerNoteRowIndex].querySelectorAll('td')[this.pointer.position]
-
-
+            // remove pointer from old td column location
+            //const oldPointerColumnLocation = this.measure.rows[this.measure.rows.length-1].cells[oldPointerPosition]
+            const oldPointerColumnLocation = this.measure.querySelector('.museMeasurePointerContainer').cells[oldPointerPosition]
+            oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
+        }
+        // Set new pointer position
         this.pointer.position = noteNumberIndex;
-
-        
+        // Create new pointer and add to new td location
+        const pointerImg = document.createElement('img');
+        pointerImg.setAttribute('class', "museMeasurePointerImage");
+        pointerImg.setAttribute('src', "./static/pointer.png");
+        this.measure.querySelector('.museMeasurePointerContainer').cells[this.pointer.position].appendChild(pointerImg);
     }
 
     addNoteAtCurrentPosition(note) {
@@ -67,7 +78,7 @@ class Measure {
         const noteImage = note.createNoteImage();
 
         if(this.notes[this.pointer.position]) {
-            noteImage.addEventListener('click', onNoteClick);
+            noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
         }
 
 
@@ -105,10 +116,8 @@ function createMeasure(beatsPerMeasure, beatUnit) {
         const noteRow = document.createElement('tr');
         measureTbody.appendChild(noteRow);
         // last row for the pointer
-        if(i === 16) {
+        if(i === 15) {
             noteRow.setAttribute('class', 'museMeasurePointerContainer');
-            const pointerImg = document.createElement('img');
-            pointerImg.setAttribute("class", "museMeasurePointerImage")
         } else {
             noteRow.addEventListener('click', clickNoteToAddToMeasure)
         }
@@ -138,9 +147,15 @@ function clickNoteToAddToMeasure(e) {
 
 
 
-function onNoteClick(e) {
-    // td column number of note
-    const noteNumberIndex = this.parentNode.cellIndex
-    this.setAttribute("class", this.className + " highlighted");
-    setPointerPosition(noteNumberIndex);
+function onNoteClick(e, measure) {
+    /* const noteNumberIndex = this.parentNode.cellIndex;
+    this.setAttribute("class", this.className + " highlighted"); */
+
+    // Highlight note
+    const noteContainer = e.target.querySelector('.museStaffNote');
+    noteContainer.setAttribute("class", noteContainer.className + " highlighted");
+
+    // Set pointer position to the same td column number of note
+    const noteNumberIndex = e.target.cellIndex;
+    measure.setPointerPosition(noteNumberIndex);
 }
