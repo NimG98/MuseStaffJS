@@ -60,7 +60,7 @@ class Measure {
         // Create new pointer and add to new td location
         const pointerImg = document.createElement('img');
         pointerImg.setAttribute('class', "museMeasurePointerImage");
-        pointerImg.setAttribute('src', "./static/pointer.png");
+        pointerImg.setAttribute('src', "src/static/pointer.png");
         this.measure.querySelector('.museMeasurePointerContainer').cells[this.pointer.position].appendChild(pointerImg);
     }
 

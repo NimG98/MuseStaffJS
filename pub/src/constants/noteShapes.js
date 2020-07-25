@@ -77,49 +77,49 @@ const noteDirection = {
 const noteShapeByUnit = {
     note: {
         whole: {
-            image: "../static/note-whole.png",
+            image: "src/static/note-whole.png",
             line: {
-                end: "../static/note-whole-line-top.png",
-                middle: "../static/note-whole-line-middle.png"
+                end: "src/static/note-whole-line-top.png",
+                middle: "src/static/note-whole-line-middle.png"
             }
         },
         half: {
-            image: "../static/note-half.png"
+            image: "src/static/note-half.png"
         },
         quarter: {
-            image: "../static/note-quarter.png"
+            image: "src/static/note-quarter.png"
         },
         eighth: {
-            image: "../static/note-eighth.png",
-            stemDownwards: "../static/note-eighth-down.png"
+            image: "src/static/note-eighth.png",
+            stemDownwards: "src/static/note-eighth-down.png"
         },
         sixteenth: {
-            image: "../static/note-sixteenth.png",
-            stemDownwards: "../static/note-sixteenth-down.png"
+            image: "src/static/note-sixteenth.png",
+            stemDownwards: "src/static/note-sixteenth-down.png"
         }
     },
     rest: {
         whole: {
-            image: "../static/rest-whole.png",
+            image: "src/static/rest-whole.png",
         },
         half: {
-            image: "../static/rest-half.png"
+            image: "src/static/rest-half.png"
         },
         quarter: {
-            image: "../static/rest-quarter.png"
+            image: "src/static/rest-quarter.png"
         },
         eighth: {
-            image: "../static/rest-eighth.png",
+            image: "src/static/rest-eighth.png",
         },
         sixteenth: {
-            image: "../static/rest-sixteenth.png",
+            image: "src/static/rest-sixteenth.png",
         }
     }
 }
 
 const noteShapeLineComponent = {
-    end: "../static/note-line-top.png",
-    middle: "../static/note-line-middle.png"
+    end: "src/static/note-line-top.png",
+    middle: "src/static/note-line-middle.png"
 }
 
-const noteShapeDotComponent = "../static/note-dot.png"
+const noteShapeDotComponent = "src/static/note-dot.png"
