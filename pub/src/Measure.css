@@ -1,0 +1,58 @@
+.museMeasure {
+    width: 1000px;
+    height: 1000px;
+    border-collapse: collapse;
+}
+
+.museMeasure tr .museMeasureLine {
+    width: 100%;
+    border-top: 1px solid black;
+    position: absolute;
+    left: 0;
+}
+
+.museMeasure tr {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    height: 20px;
+    position: relative;
+}
+
+.museMeasure td {
+    width: 100%;
+    height: 100%;
+}
+
+.highlighted * {
+    filter: brightness(0.9) invert(.7) sepia(.5) hue-rotate(100deg) saturate(200%);
+}
+.tdHidden {
+    display: none;
+}
+
+.endMeasureLine {
+    border-right: 1px solid black;
+}
+
+.museMeasurePointerContainer {
+    padding-top: 50px;
+}
+
+.museMeasurePointerContainer td:not(.tdHidden) {
+    position: relative;
+    max-width:100%;
+    max-height:100%;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+.museMeasurePointerImage {
+    position: absolute;
+    width: 30%;
+    height: 200%;
+}
