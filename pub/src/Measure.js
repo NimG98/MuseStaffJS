@@ -48,6 +48,7 @@ class Measure {
     setPointerVisible(boolean) {
         this.pointer.visible = boolean;
         if(!boolean) {
+            //this.removePointer();
             this.pointer.position = null;
         }
     }
@@ -55,6 +56,7 @@ class Measure {
     // remove pointer and highlight from old note that was pointed on
     removePointer() {
         // remove highlight from old note
+        console.log("remove");
         const oldPointerPosition = this.pointer.position;
         const oldNotePointedOn = this.notes[oldPointerPosition];
 
@@ -79,8 +81,12 @@ class Measure {
     }
 
     setPointerPosition(noteNumberIndex) {
-        if(this.pointer.position) {
+        console.log("lol " + noteNumberIndex);
+        if(this.pointer.position && noteNumberIndex !== this.pointer.position) {
             this.removePointer();
+        }
+        if(noteNumberIndex === this.pointer.position) {
+            return;
         }
         // Set new pointer position
         this.pointer.position = noteNumberIndex;
@@ -105,6 +111,9 @@ class Measure {
         pointerImg.setAttribute('class', "museMeasurePointerImage");
         pointerImg.setAttribute('src', "src/static/pointer.png");
         getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[this.pointer.position].appendChild(pointerImg);
+        Object.values(this.measure.rows).map( (tr) => {
+            getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', (e) => clickNoteToAddToMeasure(e, this) );
+        })
     }
 
     addNoteAtCurrentPosition(note) {
@@ -124,7 +133,9 @@ class Measure {
 
             Object.values(this.measure.rows).map( (tr, index) => {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
-                if(tdPointedOn.hasChildren()) {
+                console.log("tdPointedOn")
+                console.log(tdPointedOn)
+                if(tdPointedOn.hasChildNodes()) {
                     tdPointedOn.removeChild(tdPointedOn.firstChild);
                 }
                 if(index === noteRowIndex) {
@@ -133,14 +144,14 @@ class Measure {
 
                 // Supporting multiple notes in same location on top of each other - PENDING
                 /* if(index === noteRowIndex) {
-                    if(tdPointedOn.hasChildren()) {
+                    if(tdPointedOn.hasChildNodes()) {
                         tdPointedOn.removeChild(tdPointedOn.firstChild);
                     }
                     tdPointedOn.appendChild(noteImage);
 
                 } else {
                     // multiple notes in same location
-                    if(tdPointedOn.hasChildren()) {
+                    if(tdPointedOn.hasChildNodes()) {
                         this.notes[this.pointer.position]
                         tdPointedOn.firstChild;
                     }
@@ -187,7 +198,7 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     var currentTd = noteTd;
     var notePosition = position;
     var noteImage = null;
-    if(currentTd.hasChildren() && numColumnsToPush !== 0) {
+    if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
         currentTd.setAttribute('class', currentTd.className + " tdHidden");
     }
@@ -210,6 +221,9 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     }
     for(var i = 0; i < columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
+        if(!nextSibling) {
+            break;
+        }
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
@@ -239,7 +253,11 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
     var notePosition = position;
     var noteImage = null;
 
-    if(currentTd.hasChildren() && numColumnsToPush !== 0) {
+    if(!currentTd) {
+        return;
+    }
+
+    if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
         currentTd.setAttribute('class', currentTd.className + " tdHidden");
     }
@@ -312,7 +330,7 @@ function createEmptyMeasure(beatsPerMeasure, beatUnit) {
         if(i === 15) {
             noteRow.setAttribute('class', 'museMeasurePointerContainer');
         } else {
-            noteRow.addEventListener('click', clickNoteToAddToMeasure)
+            //noteRow.addEventListener('click', (e) => clickNoteToAddToMeasure(e, this) )
         }
         // note rows with staff lines
         if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
@@ -355,7 +373,23 @@ function fillDefaultMeasure(museMeasure){
 
 
 function fillRemainingWithRests(museMeasure, noteIndex) {
-
+    const tdPointedOn = getNonHiddenTds(museMeasure.measure.rows[index].cells)[noteIndex];
+    const beatUnit = museMeasure.timeSig.beatUnit;
+    const restUnitName = Object.keys(noteUnitMinEquivalents).filter( (noteUnit) => {
+        return noteUnitMinEquivalents[noteUnit] === beatUnit;
+    })[0];
+    
+    while(tdPointedOn) {
+        if(tdPointedOn.hasChildNodes()) {
+            tdPointedOn.removeChild(tdPointedOn.firstChild);
+        }
+        if(tdPointedOn.className.includes("tdHidden")) {
+            tdPointedOn.setAttribute('class', "");
+        }
+        const restImage = new Rest(restUnitName).createNoteImage();
+        tdPointedOn.appendChild(restImage);
+        tdPointedOn = tdPointedOn.nextSibling;
+    }
 }
 
 function getNonHiddenTds(cells) {
@@ -364,25 +398,37 @@ function getNonHiddenTds(cells) {
     })
 }
 
-function clickNoteToAddToMeasure(e) {
-    e.preventDefault();
-
-    const noteRowIndex = this.rowIndex;
-    const notesBasedOnRow = Object.keys(noteDirection).reverse();
-    const noteValue = notesBasedOnRow[noteRowIndex];
-}
-
-
 
 function onNoteClick(e, museMeasure) {
     /* const noteNumberIndex = this.parentNode.cellIndex;
     this.setAttribute("class", this.className + " highlighted"); */
 
     // Highlight note
-    const noteContainer = e.target.querySelector('.museStaffNote');
+    console.log(e.target.parentNode.parentNode);
+    const noteContainer = e.target.parentNode;
     noteContainer.setAttribute('class', noteContainer.className + " highlighted");
 
     // Set pointer position to the same td column number of note
-    const noteNumberIndex = e.target.cellIndex;
+    const td = e.target.parentNode.parentNode;
+    var noteNumberIndex = null;
+    getNonHiddenTds(e.target.parentNode.parentNode.parentNode.cells).filter( (noteTd, index) => {
+        if(noteTd === td) {
+            noteNumberIndex = index;
+        }
+        return noteTd === td
+    });
+
+    console.log(noteNumberIndex);
     museMeasure.setPointerPosition(noteNumberIndex);
+}
+
+
+function clickNoteToAddToMeasure(e, museMeasure) {
+    const noteRowIndex = e.target.parentNode.rowIndex;
+    const notesBasedOnRow = Object.keys(noteDirection).reverse();
+    const noteValue = notesBasedOnRow[noteRowIndex];
+    const noteUnit = "quarter";
+    console.log(e.target)
+    const note = new Note(noteValue, noteUnit);
+    museMeasure.addNoteAtCurrentPosition(note);
 }
