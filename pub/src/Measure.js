@@ -140,7 +140,22 @@ class Measure {
                 this.pointer.position = 0;
             }
             console.log(this.pointer.position);
-            const tdPointedOn = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position];
+            //
+            Object.values(this.measure.rows).map( (tr, index) => {
+                const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
+                if(index === noteRowIndex) {
+                    tdPointedOn.appendChild(noteImage);
+                }
+                var currentTd = tdPointedOn;
+                for(var i = 0; i < columnsToTakeUp-1; i++) {
+                    var nextSibling = currentTd.nextSibling
+                    nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+                    currentTd = nextSibling;
+                }
+
+            })
+            //
+/*             const tdPointedOn = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position];
             tdPointedOn.appendChild(noteImage);
             console.log(tdPointedOn);
             var currentTd = tdPointedOn;
@@ -148,12 +163,12 @@ class Measure {
                 var nextSibling = currentTd.nextSibling
                 nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
                 currentTd = nextSibling;
-            }
+            } */
             this.notes.splice(this.pointer.position, 0, note);
             console.log(this.notes);
 
-            const noteContainer = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position].querySelector('.museStaffNote');
-            noteContainer.setAttribute('class', noteContainer.className + " highlighted");
+            // const noteContainer = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position].querySelector('.museStaffNote');
+            // noteContainer.setAttribute('class', noteContainer.className + " highlighted");
 
             // this.setPointerPosition(this.pointer.position);
             // this.pointer.position +=1;
