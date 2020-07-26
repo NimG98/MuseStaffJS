@@ -140,7 +140,7 @@ class Measure {
                 this.pointer.position = 0;
             }
             console.log(this.pointer.position);
-            //
+            // Put image in td, make other tds hidden if part of the same note
             Object.values(this.measure.rows).map( (tr, index) => {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
                 if(index === noteRowIndex) {
@@ -154,16 +154,6 @@ class Measure {
                 }
 
             })
-            //
-/*             const tdPointedOn = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position];
-            tdPointedOn.appendChild(noteImage);
-            console.log(tdPointedOn);
-            var currentTd = tdPointedOn;
-            for(var i = 0; i < columnsToTakeUp-1; i++) {
-                var nextSibling = currentTd.nextSibling
-                nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
-                currentTd = nextSibling;
-            } */
             this.notes.splice(this.pointer.position, 0, note);
             console.log(this.notes);
 
