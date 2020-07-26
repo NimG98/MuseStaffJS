@@ -64,7 +64,7 @@ class Measure {
         }
         // for Rest notes, place in middle line of staff measure (8th row)
         else {
-            oldNotePointedOnRowIndex = 8;
+            oldNotePointedOnRowIndex = 7;
         }
         const oldNotePointedOnContainer = getNonHiddenTds(this.measure.rows[oldNotePointedOnRowIndex].cells)[oldPointerPosition].querySelector('.highlighted');
         //bad -> document.querySelector('.museMeasure').querySelectorAll('tr')[oldPointerNoteRowIndex].querySelectorAll('td')[oldPointerPosition]
@@ -92,7 +92,7 @@ class Measure {
             }
             // for Rest notes, place in middle line of staff measure (8th row)
             else {
-                notePointedOnRowIndex = 8;
+                notePointedOnRowIndex = 7;
             }
             const noteContainer = getNonHiddenTds(this.measure.rows[notePointedOnRowIndex].cells)[this.pointer.position].querySelector('.museStaffNote');
             noteContainer.setAttribute('class', noteContainer.className + " highlighted");
@@ -115,7 +115,7 @@ class Measure {
         }
         // for Rest notes, place in middle line of staff measure (8th row)
         else {
-            noteRowIndex = 8;
+            noteRowIndex = 7;
         }
         const noteImage = note.createNoteImage();
         noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
