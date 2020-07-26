@@ -120,18 +120,34 @@ class Measure {
         const noteImage = note.createNoteImage();
         noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
 
-        var noteImageAdded = false;
         if(this.notes[this.pointer.position]) {
-            const tdPointedOn = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position];
-            while(tdPointedOn.nextSibling) {
 
-            }
-            /* const rowContentStartingFromPointerPosition = this.measure.rows[noteRowIndex].cells.slice(this.pointer.position, this.notes.length);
-            for(var i = 0; i < rowContentStartingFromPointerPosition.length; i++) {
-                if(!td.className.includes("tdHidden")){
-
+            Object.values(this.measure.rows).map( (tr, index) => {
+                const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
+                if(tdPointedOn.hasChildren()) {
+                    tdPointedOn.removeChild(tdPointedOn.firstChild);
                 }
-            } */
+                if(index === noteRowIndex) {
+                    tdPointedOn.appendChild(noteImage);
+                }
+
+                // Supporting multiple notes in same location on top of each other - PENDING
+                /* if(index === noteRowIndex) {
+                    if(tdPointedOn.hasChildren()) {
+                        tdPointedOn.removeChild(tdPointedOn.firstChild);
+                    }
+                    tdPointedOn.appendChild(noteImage);
+
+                } else {
+                    // multiple notes in same location
+                    if(tdPointedOn.hasChildren()) {
+                        this.notes[this.pointer.position]
+                        tdPointedOn.firstChild;
+                    }
+                } */
+                pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
+            })
+            this.notes.splice(this.pointer.position, 0, note);
             this.setPointerPosition(this.pointer.position+1);
         
         // Only occurs during creation of measure, since no default Rest notes yet
@@ -164,6 +180,90 @@ class Measure {
             // this.pointer.position +=1;
         }
         
+    }
+}
+
+function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, position) {
+    var currentTd = noteTd;
+    var notePosition = position;
+    var noteImage = null;
+    if(currentTd.hasChildren() && numColumnsToPush !== 0) {
+        noteImage = currentTd.removeChild(currentTd.firstChild);
+        currentTd.setAttribute('class', currentTd.className + " tdHidden");
+    }
+    if(numColumnsToPush === 0) {
+        numColumnsToPush = columnsToTakeUp;
+    }
+
+    for(var i = 0; i < numColumnsToPush-1; i++) {
+        var nextSibling = currentTd.nextSibling
+        if(!nextSibling.className.includes("tdHidden")){
+            notePosition += 1;
+            var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
+            pushNoteForward(nextSibling, numColumnsToPush, newNoteColumnsToTakeUp, notes, notePosition);
+        }
+        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+        currentTd = nextSibling;
+    }
+    if(noteImage) {
+        currentTd.appendChild(noteImage)
+    }
+    for(var i = 0; i < columnsToTakeUp-1; i++) {
+        var nextSibling = currentTd.nextSibling
+        if(!nextSibling.className.includes("tdHidden")){
+            notePosition += 1;
+            var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
+            pushNoteForward(nextSibling, numColumnsToPush, newNoteColumnsToTakeUp, notes, notePosition);
+        }
+        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+        currentTd = nextSibling;
+    }
+
+    currentTd = noteTd;
+    var hiddenCount = 0;
+    var nextSibling = null;
+    var notePosition = position;
+    while(currentTd.nextSibling && currentTd.nextSibling.className.includes("tdHidden")) {
+        var nextSibling = currentTd.nextSibling;
+        hiddenCount +=1;
+        currentTd = nextSibling;
+    }
+    if(hiddenCount >= columnsToTakeUp){
+        notePosition += 1;
+        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(notes[notePosition]), notes, notePosition);
+    }
+}
+
+function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, position) {
+    var currentTd = noteTd;
+    var notePosition = position;
+    var noteImage = null;
+
+    if(currentTd.hasChildren() && numColumnsToPush !== 0) {
+        noteImage = currentTd.removeChild(currentTd.firstChild);
+        currentTd.setAttribute('class', currentTd.className + " tdHidden");
+    }
+
+    for(var i = 0; i < numColumnsToPush; i++) {
+        var previousSibling = currentTd.previousSibling;
+        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+        currentTd = previousSibling;
+    }
+    if(noteImage) {
+        currentTd.appendChild(noteImage);
+    }
+
+    var hiddenCount = 0;
+    var nextSibling = null;
+    var notePosition = position;
+    while(currentTd.nextSibling && currentTd.nextSibling.className.includes("tdHidden")) {
+        var nextSibling = currentTd.nextSibling;
+        hiddenCount +=1;
+        currentTd = nextSibling;
+    }
+    if(hiddenCount >= columnsToTakeUp){
+        notePosition += 1;
+        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(notes[notePosition]), notes, notePosition);
     }
 }
 
