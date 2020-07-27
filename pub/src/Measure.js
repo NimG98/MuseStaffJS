@@ -82,7 +82,7 @@ class Measure {
 
     setPointerPosition(noteNumberIndex) {
         console.log("lol " + noteNumberIndex);
-        if(this.pointer.position && noteNumberIndex !== this.pointer.position) {
+        if(Number.isInteger(this.pointer.position) && noteNumberIndex !== this.pointer.position) {
             this.removePointer();
         }
         if(noteNumberIndex === this.pointer.position) {
@@ -137,10 +137,13 @@ class Measure {
                 console.log(tdPointedOn)
                 if(tdPointedOn.hasChildNodes()) {
                     tdPointedOn.removeChild(tdPointedOn.firstChild);
+
                 }
                 if(index === noteRowIndex) {
                     tdPointedOn.appendChild(noteImage);
                 }
+                this.notes[this.pointer.position] = note;
+
 
                 // Supporting multiple notes in same location on top of each other - PENDING
                 /* if(index === noteRowIndex) {
@@ -158,8 +161,8 @@ class Measure {
                 } */
                 pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
             })
-            this.notes.splice(this.pointer.position, 0, note);
-            this.setPointerPosition(this.pointer.position+1);
+            //this.notes.splice(this.pointer.position, 0, note);
+            //this.setPointerPosition(this.pointer.position);
         
         // Only occurs during creation of measure, since no default Rest notes yet
         } else {
@@ -221,9 +224,11 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     }
     for(var i = 0; i < columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
+        // weird
         if(!nextSibling) {
             break;
         }
+        //
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
@@ -253,9 +258,11 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
     var notePosition = position;
     var noteImage = null;
 
+    // weird
     if(!currentTd) {
         return;
     }
+    //
 
     if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
@@ -428,7 +435,8 @@ function clickNoteToAddToMeasure(e, museMeasure) {
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
     const noteUnit = "quarter";
-    console.log(e.target)
+    console.log("noteRowIndex " + noteRowIndex);
+    console.log("noteValue " + noteValue);
     const note = new Note(noteValue, noteUnit);
     museMeasure.addNoteAtCurrentPosition(note);
 }
