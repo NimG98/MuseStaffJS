@@ -135,7 +135,7 @@ class Measure {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
                 console.log("tdPointedOn")
                 console.log(tdPointedOn)
-                if(tdPointedOn.hasChildNodes()) {
+                if(tdPointedOn.hasChildNodes() && !tdPointedOn.parentNode.className.includes("museMeasurePointerContainer")) {
                     tdPointedOn.removeChild(tdPointedOn.firstChild);
 
                 }
