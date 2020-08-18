@@ -1,6 +1,6 @@
 .museMeasure {
-    width: 1000px;
-    height: 1000px;
+    width: 500px;
+    height: 500px;
     border-collapse: collapse;
 }
 
@@ -68,5 +68,5 @@
 .museMeasurePointerImage {
     position: absolute;
     width: 30%;
-    height: 200%;
+    height: 150%;
 }
