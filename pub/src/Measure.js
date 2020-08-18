@@ -56,7 +56,6 @@ class Measure {
     // remove pointer and highlight from old note that was pointed on
     removePointer() {
         // remove highlight from old note
-        console.log("remove");
         const oldPointerPosition = this.pointer.position;
         const oldNotePointedOn = this.notes[oldPointerPosition];
 
@@ -76,12 +75,10 @@ class Measure {
         //const oldPointerColumnLocation = this.measure.rows[this.measure.rows.length-1].cells[oldPointerPosition]
         const oldPointerColumnLocation = getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[oldPointerPosition]
         console.log("oldPointerColumnLocation:")
-        console.log(oldPointerColumnLocation)
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
     }
 
     setPointerPosition(noteNumberIndex) {
-        console.log("lol " + noteNumberIndex);
         if(Number.isInteger(this.pointer.position) && noteNumberIndex !== this.pointer.position) {
             this.removePointer();
         }
@@ -128,13 +125,12 @@ class Measure {
         }
         const noteImage = note.createNoteImage();
         noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
+        noteImage.setAttribute('class', noteImage.className + " highlighted");
 
         if(this.notes[this.pointer.position]) {
 
             Object.values(this.measure.rows).map( (tr, index) => {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
-                console.log("tdPointedOn")
-                console.log(tdPointedOn)
                 if(tdPointedOn.hasChildNodes() && !tdPointedOn.parentNode.className.includes("museMeasurePointerContainer")) {
                     tdPointedOn.removeChild(tdPointedOn.firstChild);
 
@@ -185,7 +181,6 @@ class Measure {
 
             })
             this.notes.splice(this.pointer.position, 0, note);
-            console.log(this.notes);
 
             // const noteContainer = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position].querySelector('.museStaffNote');
             // noteContainer.setAttribute('class', noteContainer.className + " highlighted");
@@ -232,7 +227,7 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
-            pushNoteForward(nextSibling, numColumnsToPush, newNoteColumnsToTakeUp, notes, notePosition);
+            pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, notes, notePosition);
         }
         //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
         currentTd = nextSibling;
@@ -411,7 +406,6 @@ function onNoteClick(e, museMeasure) {
     this.setAttribute("class", this.className + " highlighted"); */
 
     // Highlight note
-    console.log(e.target.parentNode.parentNode);
     const noteContainer = e.target.parentNode;
     noteContainer.setAttribute('class', noteContainer.className + " highlighted");
 
