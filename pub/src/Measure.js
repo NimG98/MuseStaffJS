@@ -80,7 +80,6 @@ class Measure {
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
 
         Object.values(this.measure.rows).map( (tr) => {
-            console.log(getNonHiddenTds(tr.cells)[oldPointerPosition])
             getNonHiddenTds(tr.cells)[oldPointerPosition].removeEventListener('click', this.inputListener);
         })
     }
@@ -429,6 +428,10 @@ function onNoteClick(e, museMeasure) {
 
     // Highlight note
     const noteContainer = e.target.parentNode;
+    console.log(noteContainer)
+    if(noteContainer.tagName === "TD"){
+        return;
+    }
     noteContainer.setAttribute('class', noteContainer.className + " highlighted");
 
     // Set pointer position to the same td column number of note

@@ -35,6 +35,14 @@
     z-index: -1;
 }
 
+.highlighted .museStaffNoteLineImage {
+    z-index: -1;
+}
+
+.highlighted .museStaffNoteDotImage {
+    z-index: -1;
+}
+
 .tdHidden {
     display: none;
 }

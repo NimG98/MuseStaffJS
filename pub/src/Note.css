@@ -22,7 +22,7 @@
     position: absolute;
     /* top: 0;
     left: 0; */
-    z-index:100;
+    z-index:0;
     margin-top: -40px;
     max-width:100%;
     max-height:400%;
@@ -32,7 +32,7 @@
     position: absolute;
     /* top: 0;
     left: 0; */
-    z-index:100;
+    z-index:0;
     margin-top: -40px;
     max-width:100%;
     max-height:400%;
