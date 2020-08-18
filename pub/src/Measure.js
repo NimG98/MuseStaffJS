@@ -451,6 +451,10 @@ function onNoteClick(e, museMeasure) {
 
 function clickNoteToAddToMeasure(e, museMeasure) {
     console.log(e.target);
+    // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
+    if(e.target.tagName !== "TD") {
+        return;
+    }
     const noteRowIndex = e.target.parentNode.rowIndex;
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
