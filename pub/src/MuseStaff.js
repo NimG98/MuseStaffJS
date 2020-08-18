@@ -8,7 +8,7 @@ class MuseStaff {
     addMeasure(measure) {
         // Add end of measure vertical line to previous measure
         if(this.measures.length > 0) {
-            this.measures[this.measures.length-1].measure.rows.map( (tr) => {
+            Object.values(this.measures[this.measures.length-1].measure.rows).map( (tr) => {
                 if(!tr.className.includes("museMeasurePointerContainer")) {
                     const lastTdChild = tr.cells[tr.cells.length-1];
                     lastTdChild.setAttribute('class', lastTdChild.className + " endMeasureLine"); 
@@ -26,7 +26,7 @@ class MuseStaff {
     setMeasurePointedOn(measureIndex) {
         // Remove pointer from old measure
         if(this.measurePointedOn) {
-            this.measurePointedOn.setPointerVisible(false);
+            //this.measurePointedOn.setPointerVisible(false);
             this.measurePointedOn.removePointer();
         }
         this.measurePointedOn = this.measures[measureIndex];
