@@ -28,7 +28,13 @@
 
 .highlighted * {
     filter: brightness(0.9) invert(.7) sepia(.5) hue-rotate(100deg) saturate(200%);
+    z-index: -1;
 }
+
+.highlighted .museStaffNoteImage {
+    z-index: -1;
+}
+
 .tdHidden {
     display: none;
 }

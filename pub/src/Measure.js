@@ -376,6 +376,21 @@ function fillDefaultMeasure(museMeasure){
         museMeasure.pointer.position +=1;
         // museMeasure.setPointerPosition(museMeasure.pointer.position + 1);
     }
+    // Remove highlight from non-pointed notes that were newly created
+    const highlightedDefaultNotes = Array.from(museMeasure.measure.querySelectorAll('.highlighted'));
+    console.log(highlightedDefaultNotes)
+    if(highlightedDefaultNotes.length > 1) {
+        highlightedDefaultNotes.map( (noteContainer, index) => {
+            if(index !== 0) {
+                noteContainer.setAttribute('class', "museStaffNote");
+            } else {
+                /* first note className is "class="museStaffNote highlighted highlighted"" for some reason
+                remove one of the highlighted: */
+                // noteContainer.setAttribute('class', noteContainer.className.replace("highlighted", ""));
+            }
+        })
+    }
+
     museMeasure.setPointerVisible(false);
 }
 
@@ -432,6 +447,7 @@ function onNoteClick(e, museMeasure) {
 
 
 function clickNoteToAddToMeasure(e, museMeasure) {
+    console.log(e.target);
     const noteRowIndex = e.target.parentNode.rowIndex;
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
