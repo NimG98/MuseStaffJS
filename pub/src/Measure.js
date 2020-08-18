@@ -380,7 +380,7 @@ function fillDefaultMeasure(museMeasure){
     console.log(highlightedDefaultNotes)
     if(highlightedDefaultNotes.length > 1) {
         highlightedDefaultNotes.map( (noteContainer, index) => {
-            if(index !== 0) {
+            if(index !== museMeasure.pointer.position) {
                 noteContainer.setAttribute('class', "museStaffNote");
             } else {
                 /* first note className is "class="museStaffNote highlighted highlighted"" for some reason

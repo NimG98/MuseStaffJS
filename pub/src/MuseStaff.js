@@ -33,7 +33,7 @@ class MuseStaff {
         }
         this.measurePointedOn = this.measures[measureIndex];
         this.measurePointedOn.setPointerVisible(true);
-        this.measurePointedOn.setPointerPosition(0);
+        this.measurePointedOn.setPointerPosition(2);
     }
 
     display() {
