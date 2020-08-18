@@ -8,10 +8,12 @@ class MuseStaff {
     addMeasure(measure) {
         // Add end of measure vertical line to previous measure
         if(this.measures.length > 0) {
-            Object.values(this.measures[this.measures.length-1].measure.rows).map( (tr) => {
+            Object.values(this.measures[this.measures.length-1].measure.rows).map( (tr, index) => {
                 if(!tr.className.includes("museMeasurePointerContainer")) {
-                    const lastTdChild = tr.cells[tr.cells.length-1];
-                    lastTdChild.setAttribute('class', lastTdChild.className + " endMeasureLine"); 
+                    if(index >= 3 && index <= 11) {
+                        const lastTdChild = getNonHiddenTds(tr.cells)[getNonHiddenTds(tr.cells).length-1]
+                        lastTdChild.setAttribute('class', lastTdChild.className + " endMeasureLine"); 
+                    }
                 }
             })
             // this.measures[this.measures.length-1].querySelectorAll('tr').map( (tr) => {

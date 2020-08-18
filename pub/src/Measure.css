@@ -2,6 +2,7 @@
     width: 500px;
     height: 500px;
     border-collapse: collapse;
+    display: inline-table;
 }
 
 .museMeasure tr .museMeasureLine {
