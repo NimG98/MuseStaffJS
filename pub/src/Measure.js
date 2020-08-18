@@ -20,6 +20,8 @@ class Measure {
         createMeasure(this);
     }
 
+    inputListener = (e) => clickNoteToAddToMeasure(e, this);
+
     setNotes(notes) {
         //check if sum of notes note values equivalent or less than columns in measure
 
@@ -76,6 +78,11 @@ class Measure {
         const oldPointerColumnLocation = getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[oldPointerPosition]
         console.log("oldPointerColumnLocation:")
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
+
+        Object.values(this.measure.rows).map( (tr) => {
+            console.log(getNonHiddenTds(tr.cells)[oldPointerPosition])
+            getNonHiddenTds(tr.cells)[oldPointerPosition].removeEventListener('click', this.inputListener);
+        })
     }
 
     setPointerPosition(noteNumberIndex) {
@@ -91,7 +98,7 @@ class Measure {
         if(note) {
             var notePointedOnRowIndex;
             if(note.noteType === "note") {
-                notePointedOnRowIndex = Object.keys(noteDirection).reverse().indexOf(notePointedOn.noteValue);
+                notePointedOnRowIndex = Object.keys(noteDirection).reverse().indexOf(note.noteValue);
             }
             // for Rest notes, place in middle line of staff measure (8th row)
             else {
@@ -109,7 +116,7 @@ class Measure {
         pointerImg.setAttribute('src', "src/static/pointer.png");
         getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[this.pointer.position].appendChild(pointerImg);
         Object.values(this.measure.rows).map( (tr) => {
-            getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', (e) => clickNoteToAddToMeasure(e, this) );
+            getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', this.inputListener );
         })
     }
 
