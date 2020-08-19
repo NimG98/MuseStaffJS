@@ -11,7 +11,7 @@ class Measure {
         this.timeSig = new TimeSignature(4, 4);
         this.measure = null;
         this.lyrics = [];
-        // this.editable = false;
+        this.editable = false;
         // this.playable = false;
         this.pointer = {
             visible: false,
@@ -53,6 +53,11 @@ class Measure {
             //this.removePointer();
             this.pointer.position = null;
         }
+    }
+
+    setMeasureEditable(boolean) {
+        this.editable = boolean;
+        this.setPointerVisible(boolean);
     }
 
     // remove pointer and highlight from old note that was pointed on
@@ -129,9 +134,11 @@ class Measure {
         else {
             noteRowIndex = 7;
         }
+
         const noteImage = note.createNoteImage();
-        noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
-        noteImage.setAttribute('class', noteImage.className + " highlighted");
+        if(!noteImage.className.includes("highlighted")){
+            noteImage.setAttribute('class', noteImage.className + " highlighted");
+        }
 
         if(this.notes[this.pointer.position]) {
 
@@ -385,7 +392,7 @@ function fillDefaultMeasure(museMeasure){
             } else {
                 /* first note className is "class="museStaffNote highlighted highlighted"" for some reason
                 remove one of the highlighted: */
-                // noteContainer.setAttribute('class', noteContainer.className.replace("highlighted", ""));
+                noteContainer.setAttribute('class', noteContainer.className.replace("highlighted", ""));
             }
         })
     }
@@ -422,31 +429,31 @@ function getNonHiddenTds(cells) {
 }
 
 
-function onNoteClick(e, museMeasure) {
-    /* const noteNumberIndex = this.parentNode.cellIndex;
-    this.setAttribute("class", this.className + " highlighted"); */
+// function onNoteClick(e, museMeasure) {
+//     /* const noteNumberIndex = this.parentNode.cellIndex;
+//     this.setAttribute("class", this.className + " highlighted"); */
 
-    // Highlight note
-    const noteContainer = e.target.parentNode;
-    console.log(noteContainer)
-    if(noteContainer.tagName === "TD"){
-        return;
-    }
-    noteContainer.setAttribute('class', noteContainer.className + " highlighted");
+//     // Highlight note
+//     const noteContainer = e.target.parentNode;
+//     console.log(noteContainer)
+//     if(noteContainer.tagName === "TD"){
+//         return;
+//     }
+//     noteContainer.setAttribute('class', noteContainer.className + " highlighted");
 
-    // Set pointer position to the same td column number of note
-    const td = e.target.parentNode.parentNode;
-    var noteNumberIndex = null;
-    getNonHiddenTds(e.target.parentNode.parentNode.parentNode.cells).filter( (noteTd, index) => {
-        if(noteTd === td) {
-            noteNumberIndex = index;
-        }
-        return noteTd === td
-    });
+//     // Set pointer position to the same td column number of note
+//     const td = e.target.parentNode.parentNode;
+//     var noteNumberIndex = null;
+//     getNonHiddenTds(e.target.parentNode.parentNode.parentNode.cells).filter( (noteTd, index) => {
+//         if(noteTd === td) {
+//             noteNumberIndex = index;
+//         }
+//         return noteTd === td
+//     });
 
-    console.log(noteNumberIndex);
-    museMeasure.setPointerPosition(noteNumberIndex);
-}
+//     console.log(noteNumberIndex);
+//     museMeasure.setPointerPosition(noteNumberIndex);
+// }
 
 
 function clickNoteToAddToMeasure(e, museMeasure) {
