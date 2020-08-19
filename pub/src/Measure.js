@@ -81,7 +81,7 @@ class Measure {
         // remove pointer from old td column location
         //const oldPointerColumnLocation = this.measure.rows[this.measure.rows.length-1].cells[oldPointerPosition]
         const oldPointerColumnLocation = getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[oldPointerPosition]
-        console.log("oldPointerColumnLocation:")
+        // console.log("oldPointerColumnLocation:")
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
 
         Object.values(this.measure.rows).map( (tr) => {
@@ -178,7 +178,7 @@ class Measure {
             if(!this.pointer.position) {
                 this.pointer.position = 0;
             }
-            console.log(this.pointer.position);
+            // console.log(this.pointer.position);
             // Put image in td, make other tds hidden if part of the same note
             Object.values(this.measure.rows).map( (tr, index) => {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
@@ -384,7 +384,7 @@ function fillDefaultMeasure(museMeasure){
     }
     // Remove highlight from non-pointed notes that were newly created
     const highlightedDefaultNotes = Array.from(museMeasure.measure.querySelectorAll('.highlighted'));
-    console.log(highlightedDefaultNotes)
+    // console.log(highlightedDefaultNotes)
     if(highlightedDefaultNotes.length > 1) {
         highlightedDefaultNotes.map( (noteContainer, index) => {
             if(index !== museMeasure.pointer.position) {
@@ -457,7 +457,7 @@ function getNonHiddenTds(cells) {
 
 
 function clickNoteToAddToMeasure(e, museMeasure) {
-    console.log(e.target);
+    // console.log(e.target);
     // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
     if(e.target.tagName !== "TD") {
         return;
