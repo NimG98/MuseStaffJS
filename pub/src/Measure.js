@@ -1,9 +1,6 @@
 /* JS Library */
 "use strict";
 
-// import {noteDirection} from './constants/noteShapes';
-
-
 class Measure {
     constructor() {
         this.notes = [];
@@ -20,12 +17,10 @@ class Measure {
         createMeasure(this);
     }
 
-    // inputListener = (e) => clickNoteToAddToMeasure(e, this);
-
     setNotes(notes) {
         //check if sum of notes note values equivalent or less than columns in measure
-
         // if less than measure, fill remaining with Rests
+
 
         // assign notes to this.notes
         this.notes = notes;
@@ -75,21 +70,15 @@ class Measure {
             oldNotePointedOnRowIndex = 7;
         }
         const oldNotePointedOnContainer = getNonHiddenTds(this.measure.rows[oldNotePointedOnRowIndex].cells)[oldPointerPosition].querySelector('.highlighted');
-        //bad -> document.querySelector('.museMeasure').querySelectorAll('tr')[oldPointerNoteRowIndex].querySelectorAll('td')[oldPointerPosition]
         oldNotePointedOnContainer.setAttribute('class', "museStaffNote");
 
         // remove pointer from old td column location
-        //const oldPointerColumnLocation = this.measure.rows[this.measure.rows.length-1].cells[oldPointerPosition]
         const oldPointerColumnLocation = getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[oldPointerPosition]
-        // console.log("oldPointerColumnLocation:")
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
-
-        // Object.values(this.measure.rows).map( (tr) => {
-        //     getNonHiddenTds(tr.cells)[oldPointerPosition].removeEventListener('click', this.inputListener);
-        // })
     }
 
     setPointerPosition(noteNumberIndex) {
+        // remove pointer and highlight from old note that was pointed on
         if(Number.isInteger(this.pointer.position) && noteNumberIndex !== this.pointer.position) {
             this.removePointer();
         }
@@ -112,16 +101,11 @@ class Measure {
             noteContainer.setAttribute('class', noteContainer.className + " highlighted");
         }
 
-        // remove pointer and highlight from old note that was pointed on
-
         // Create new pointer and add to new td location
         const pointerImg = document.createElement('img');
         pointerImg.setAttribute('class', "museMeasurePointerImage");
         pointerImg.setAttribute('src', "src/static/pointer.png");
         getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[this.pointer.position].appendChild(pointerImg);
-        // Object.values(this.measure.rows).map( (tr) => {
-        //     getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', this.inputListener );
-        // })
     }
 
     addNoteAtCurrentPosition(note, noteImage) {
@@ -170,15 +154,12 @@ class Measure {
                 } */
                 pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
             })
-            //this.notes.splice(this.pointer.position, 0, note);
-            //this.setPointerPosition(this.pointer.position);
         
         // Only occurs during creation of measure, since no default Rest notes yet
         } else {
             if(!this.pointer.position) {
                 this.pointer.position = 0;
             }
-            // console.log(this.pointer.position);
             // Put image in td, make other tds hidden if part of the same note
             Object.values(this.measure.rows).map( (tr, index) => {
                 const tdPointedOn = getNonHiddenTds(this.measure.rows[index].cells)[this.pointer.position];
@@ -194,12 +175,6 @@ class Measure {
 
             })
             this.notes.splice(this.pointer.position, 0, note);
-
-            // const noteContainer = getNonHiddenTds(this.measure.rows[noteRowIndex].cells)[this.pointer.position].querySelector('.museStaffNote');
-            // noteContainer.setAttribute('class', noteContainer.className + " highlighted");
-
-            // this.setPointerPosition(this.pointer.position);
-            // this.pointer.position +=1;
         }
         
     }
@@ -224,7 +199,6 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
             pushNoteForward(nextSibling, numColumnsToPush, newNoteColumnsToTakeUp, notes, notePosition);
         }
-        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
         currentTd = nextSibling;
     }
     if(noteImage) {
@@ -236,13 +210,11 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         if(!nextSibling) {
             break;
         }
-        //
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
             pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, notes, notePosition);
         }
-        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
         currentTd = nextSibling;
     }
 
@@ -270,7 +242,6 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
     if(!currentTd) {
         return;
     }
-    //
 
     if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
@@ -279,7 +250,6 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
 
     for(var i = 0; i < numColumnsToPush; i++) {
         var previousSibling = currentTd.previousSibling;
-        //nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
         currentTd = previousSibling;
     }
     if(noteImage) {
@@ -344,8 +314,6 @@ function createEmptyMeasure(beatsPerMeasure, beatUnit) {
         // last row for the pointer
         if(i === 15) {
             noteRow.setAttribute('class', 'museMeasurePointerContainer');
-        } else {
-            //noteRow.addEventListener('click', (e) => clickNoteToAddToMeasure(e, this) )
         }
         // note rows with staff lines
         if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
@@ -363,7 +331,7 @@ function createEmptyMeasure(beatsPerMeasure, beatUnit) {
     return measure;
 }
 
-// 
+
 function createMeasure(museMeasure) {
     museMeasure.measure = createEmptyMeasure(museMeasure.timeSig.beatsPerMeasure, museMeasure.timeSig.beatUnit);
     fillDefaultMeasure(museMeasure);
@@ -380,11 +348,9 @@ function fillDefaultMeasure(museMeasure){
     for(var i = 0; i < beatsPerMeasure; i++) {
         museMeasure.addNoteAtCurrentPosition(new Rest(restUnitName));
         museMeasure.pointer.position +=1;
-        // museMeasure.setPointerPosition(museMeasure.pointer.position + 1);
     }
     // Remove highlight from non-pointed notes that were newly created
     const highlightedDefaultNotes = Array.from(museMeasure.measure.querySelectorAll('.highlighted'));
-    // console.log(highlightedDefaultNotes)
     if(highlightedDefaultNotes.length > 0) {
         highlightedDefaultNotes.map( (noteContainer, index) => {
             if(index !== museMeasure.pointer.position) {
@@ -427,47 +393,3 @@ function getNonHiddenTds(cells) {
         return !td.className.includes("tdHidden");
     })
 }
-
-
-// function onNoteClick(e, museMeasure) {
-//     /* const noteNumberIndex = this.parentNode.cellIndex;
-//     this.setAttribute("class", this.className + " highlighted"); */
-
-//     // Highlight note
-//     const noteContainer = e.target.parentNode;
-//     console.log(noteContainer)
-//     if(noteContainer.tagName === "TD"){
-//         return;
-//     }
-//     noteContainer.setAttribute('class', noteContainer.className + " highlighted");
-
-//     // Set pointer position to the same td column number of note
-//     const td = e.target.parentNode.parentNode;
-//     var noteNumberIndex = null;
-//     getNonHiddenTds(e.target.parentNode.parentNode.parentNode.cells).filter( (noteTd, index) => {
-//         if(noteTd === td) {
-//             noteNumberIndex = index;
-//         }
-//         return noteTd === td
-//     });
-
-//     console.log(noteNumberIndex);
-//     museMeasure.setPointerPosition(noteNumberIndex);
-// }
-
-
-// function clickNoteToAddToMeasure(e, museMeasure) {
-//     // console.log(e.target);
-//     // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
-//     if(e.target.tagName !== "TD") {
-//         return;
-//     }
-//     const noteRowIndex = e.target.parentNode.rowIndex;
-//     const notesBasedOnRow = Object.keys(noteDirection).reverse();
-//     const noteValue = notesBasedOnRow[noteRowIndex];
-//     const noteUnit = "quarter";
-//     console.log("noteRowIndex " + noteRowIndex);
-//     console.log("noteValue " + noteValue);
-//     const note = new Note(noteValue, noteUnit);
-//     museMeasure.addNoteAtCurrentPosition(note);
-// }

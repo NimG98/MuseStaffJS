@@ -45,8 +45,6 @@ class MuseStaff {
                     }
                 }
             })
-            // this.measures[this.measures.length-1].querySelectorAll('tr').map( (tr) => {
-            // })
         }
         this.measures.push(measure);
         // Move pointer to beginning of newly created measure
@@ -58,8 +56,6 @@ class MuseStaff {
     setMeasurePointedOn(measureIndex, noteNumberIndex) {
         // Remove pointer from old measure
         if(this.measurePointedOn) {
-            // console.log(this.measurePointedOn)
-            //this.measurePointedOn.setPointerVisible(false);
             this.measurePointedOn.removePointer();
             // Remove listener for clicking old pointed at column to add notes
             Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
@@ -69,7 +65,6 @@ class MuseStaff {
             
         }
         this.measurePointedOn = this.measures[measureIndex];
-        // console.log(this.measurePointedOn)
         this.measurePointedOn.setPointerVisible(true);
         this.measurePointedOn.setPointerPosition(noteNumberIndex);
 
@@ -157,12 +152,8 @@ class MuseStaff {
 
 /* When clicking on a note, change the measure pointed on and which note the pointer is positioned at*/
 function onNoteClick(e, museStaff) {
-    /* const noteNumberIndex = this.parentNode.cellIndex;
-    this.setAttribute("class", this.className + " highlighted"); */
-
     // Highlight note
     const noteContainer = e.target.parentNode;
-    // console.log(noteContainer)
     if(noteContainer.tagName === "TD"){
         return;
     }
@@ -212,14 +203,10 @@ function onNoteClick(e, museStaff) {
         // Set new measure to be pointed on (and remove pointer from old pointed on measure)
         museStaff.setMeasurePointedOn(measureId, noteNumberIndex);
     }
-    
-    // console.log(noteNumberIndex);
-    // museMeasure.setPointerPosition(noteNumberIndex);
 }
 
 
 function clickNoteToAddToMeasure(e, museStaff) {
-    // console.log(e.target);
     // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
     if(e.target.tagName !== "TD") {
         return;
