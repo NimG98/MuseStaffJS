@@ -8,7 +8,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(2, 4);
+        this.timeSig = new TimeSignature(1, 4);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -385,7 +385,7 @@ function fillDefaultMeasure(museMeasure){
     // Remove highlight from non-pointed notes that were newly created
     const highlightedDefaultNotes = Array.from(museMeasure.measure.querySelectorAll('.highlighted'));
     // console.log(highlightedDefaultNotes)
-    if(highlightedDefaultNotes.length > 1) {
+    if(highlightedDefaultNotes.length > 0) {
         highlightedDefaultNotes.map( (noteContainer, index) => {
             if(index !== museMeasure.pointer.position) {
                 noteContainer.setAttribute('class', "museStaffNote");
