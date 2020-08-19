@@ -38,6 +38,7 @@ class Note {
                     // eigth and sixteenth downward stem notes are not transformations of the upward stem
                     if(noteShapeByUnit[this.noteType][this.noteUnit].stemDownwards) {
                         noteImgSrc = noteShapeByUnit[this.noteType][this.noteUnit].stemDownwards;
+                        noteImg.setAttribute("class", noteImg.className + " rotate180Image"); 
                     } else {
                         // rotate the note image 180deg to make the stem downwards
                         noteImg.setAttribute("class", noteImg.className + " rotate180"); 

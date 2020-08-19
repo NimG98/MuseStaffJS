@@ -226,7 +226,7 @@ function clickNoteToAddToMeasure(e, museStaff) {
     const noteRowIndex = e.target.parentNode.rowIndex;
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
-    const noteUnit = "quarter";
+    const noteUnit = "sixteenth";
     console.log("noteRowIndex " + noteRowIndex);
     console.log("noteValue " + noteValue);
     const note = new Note(noteValue, noteUnit);
