@@ -8,7 +8,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(4, 4);
+        this.timeSig = new TimeSignature(2, 4);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -311,7 +311,7 @@ function calculateNumOfMeasureNoteColumns(beatsPerMeasure, beatUnit) {
     if (toMultiply === 1) {
         return (beatsPerMeasure*beatUnit);
     } else {
-        return (beatsPerMeasure*beatUnit)*(2*toMultiply);
+        return (beatsPerMeasure*beatUnit)*(toMultiply*toMultiply);
     }
 }
 
@@ -374,8 +374,8 @@ function fillDefaultMeasure(museMeasure){
     const beatsPerMeasure = museMeasure.timeSig.beatsPerMeasure;
     const beatUnit = museMeasure.timeSig.beatUnit;
     // Add default Rest notes to new measure
-    const restUnitName = Object.keys(noteUnitMinEquivalents).filter( (noteUnit) => {
-        return noteUnitMinEquivalents[noteUnit] === beatUnit;
+    const restUnitName = Object.keys(noteUnitMaxEquivalents).filter( (noteUnit) => {
+        return noteUnitMaxEquivalents[noteUnit] === beatUnit;
     })[0];
     for(var i = 0; i < beatsPerMeasure; i++) {
         museMeasure.addNoteAtCurrentPosition(new Rest(restUnitName));
@@ -405,8 +405,8 @@ function fillDefaultMeasure(museMeasure){
 function fillRemainingWithRests(museMeasure, noteIndex) {
     const tdPointedOn = getNonHiddenTds(museMeasure.measure.rows[index].cells)[noteIndex];
     const beatUnit = museMeasure.timeSig.beatUnit;
-    const restUnitName = Object.keys(noteUnitMinEquivalents).filter( (noteUnit) => {
-        return noteUnitMinEquivalents[noteUnit] === beatUnit;
+    const restUnitName = Object.keys(noteUnitMaxEquivalents).filter( (noteUnit) => {
+        return noteUnitMaxEquivalents[noteUnit] === beatUnit;
     })[0];
     
     while(tdPointedOn) {

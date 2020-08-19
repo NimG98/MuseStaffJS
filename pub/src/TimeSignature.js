@@ -4,7 +4,7 @@ class TimeSignature {
             this.beatsPerMeasure = beatsPerMeasure;
             this.beatUnit = beatUnit;
         } else {
-            throw new Error("Invalid time signature");
+            throw new Error(`Invalid time signature: ${beatsPerMeasure}/${beatUnit}`);
         }
     }
 }

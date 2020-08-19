@@ -16,7 +16,7 @@ const noteUnitMaxEquivalents = {
     whole: 1,
     half: 2,
     quarter: 4,
-    eigh6th: 8,
+    eighth: 8,
     sixteenth: 16
 }
 
