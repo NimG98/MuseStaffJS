@@ -5,7 +5,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(4, 4);
+        this.timeSig = new TimeSignature(5, 16);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -152,7 +152,12 @@ class Measure {
                         tdPointedOn.firstChild;
                     }
                 } */
-                pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
+                const newNotes = pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
+                // If last row, don't need reference to old this.notes. Can replace this.notes to newNotes
+                // newNotes also affected by if 
+                if(index === Object.values(this.measure.rows).length-1) {
+                    this.notes = newNotes;
+                }
             })
         
         // Only occurs during creation of measure, since no default Rest notes yet
@@ -184,6 +189,10 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     var currentTd = noteTd;
     var notePosition = position;
     var noteImage = null;
+    // Need copy of notes, since if rests are being taken over and deleted from the notes list,
+    // when you get to the next row, you still need to see if newNotes[notePosition].noteType === "rest".
+    // So, don't modify this.notes, only modify newNotes. Then when all rows are done, then change this.notes to newNotes.
+    var newNotes = [...notes];
     if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
         currentTd.setAttribute('class', currentTd.className + " tdHidden");
@@ -196,8 +205,22 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         var nextSibling = currentTd.nextSibling
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
-            var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
-            pushNoteForward(nextSibling, numColumnsToPush, newNoteColumnsToTakeUp, notes, notePosition);
+            // if note is a rest, just overwrite it (delete the rest)
+            if(newNotes[notePosition].noteType === "rest"){
+                // Remove rest note image if on note row with rest image
+                if(nextSibling.hasChildNodes()) {
+                    nextSibling.removeChild(nextSibling.firstChild);
+                }
+                // Make td hidden, since it's taken over
+                nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+
+                newNotes.splice(notePosition, 1)
+                // Set notePosition back, since this will no longer be a note
+                notePosition -= 1;
+            } else {
+                var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
+                pushNoteForward(nextSibling, numColumnsToPush-i-1, newNoteColumnsToTakeUp, newNotes, notePosition);
+            }
         }
         currentTd = nextSibling;
     }
@@ -212,8 +235,8 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         }
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
-            var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(notes[notePosition]);
-            pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, notes, notePosition);
+            var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
+            pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, newNotes, notePosition);
         }
         currentTd = nextSibling;
     }
@@ -229,8 +252,10 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     }
     if(hiddenCount >= columnsToTakeUp){
         notePosition += 1;
-        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(notes[notePosition]), notes, notePosition);
+        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(newNotes[notePosition]), newNotes, notePosition);
     }
+
+    return newNotes
 }
 
 function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, position) {

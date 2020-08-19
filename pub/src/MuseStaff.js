@@ -145,6 +145,18 @@ class MuseStaff {
             }
         }
         this.measurePointedOn.addNoteAtCurrentPosition(note, noteImage);
+        if(this.measures.length > 0 && this.measures.indexOf(this.measurePointedOn) !== this.measures.length-1) {
+            Object.values(this.measurePointedOn.measure.rows).map( (tr, index) => {
+                if(!tr.className.includes("museMeasurePointerContainer")) {
+                    if(index >= 3 && index <= 11) {
+                        const lastTdChild = getNonHiddenTds(tr.cells)[getNonHiddenTds(tr.cells).length-1]
+                        if(!lastTdChild.className.includes("endMeasureLine")){
+                            lastTdChild.setAttribute('class', lastTdChild.className + " endMeasureLine");
+                        }
+                    }
+                }
+            })
+        }
     }
 }
 
