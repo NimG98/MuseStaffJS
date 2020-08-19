@@ -8,7 +8,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(16, 4);
+        this.timeSig = new TimeSignature(3, 4);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
