@@ -7,6 +7,8 @@ class MuseStaff {
         this.editable = false;
     }
 
+    inputListener = (e) => clickNoteToAddToMeasure(e, this);
+
     setEditable(editable) {
         this.editable = editable;
         this.measures.map( (museMeasure) => {
@@ -14,11 +16,16 @@ class MuseStaff {
         })
         if(editable && this.measures.length > 0) {
             this.setMeasurePointedOn(0, 0)
+            // Make note containers be clickable for changing pointer position
             this.measures.map( (museMeasure) => {
                 const museMeasureNotes = Array.from(museMeasure.measure.querySelectorAll(".museStaffNote"));
                 museMeasureNotes.map( (noteContainer) => {
                     noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
                 })
+            })
+            // Add listener for clicking newly pointed column to add notes
+            Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
             })
         }
     }
@@ -54,17 +61,26 @@ class MuseStaff {
             // console.log(this.measurePointedOn)
             //this.measurePointedOn.setPointerVisible(false);
             this.measurePointedOn.removePointer();
+            // Remove listener for clicking old pointed at column to add notes
+            Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('click', this.inputListener);
+            })
             this.measurePointedOn.setPointerVisible(false);
+            
         }
         this.measurePointedOn = this.measures[measureIndex];
         // console.log(this.measurePointedOn)
         this.measurePointedOn.setPointerVisible(true);
         this.measurePointedOn.setPointerPosition(noteNumberIndex);
 
-        // Make new note containers be clickable
+        // Make new note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
             noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
+        })
+        // Add listener for clicking newly pointed column to add notes
+        Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+            getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
         })
     }
 
@@ -82,10 +98,13 @@ class MuseStaff {
     addNoteAtCurrentMeasurePosition(note) {
 
         const noteImage = note.createNoteImage();
+        // Make new note container be clickable for changing pointer position
         noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
-        noteImage.setAttribute('class', noteImage.className + " highlighted");
+        if(!noteImage.className.includes("highlighted")){
+            noteImage.setAttribute('class', noteImage.className + " highlighted");
+        }
 
-        const numOfMeasureNoteColumns = this.measurePointedOn.rows[0].cells.length;
+        const numOfMeasureNoteColumns = this.measurePointedOn.measure.rows[0].cells.length;
         const columnsToTakeUp = getNoteColumnsToTakeUp(note);
         var numOfCurrentFilledNoteColumns = 0;
         var overflowed = false;
@@ -124,9 +143,9 @@ class MuseStaff {
                     // replace current pointer position note and subsequent notes with Rest notes
                     // replace note at index and subsequent notes with Rest notes
 
-                this.addMeasure(Measure());
+                this.addMeasure(new Measure());
                 notesToOverflow.map( (note) => {
-                    addNoteAtCurrentMeasurePosition(note)
+                    this.addNoteAtCurrentMeasurePosition(note)
                 });
             }
         }
@@ -170,14 +189,22 @@ function onNoteClick(e, museStaff) {
     const measureId = el.id.match(regex);
     // If moving pointer on same measure
     if(museStaff.measurePointedOn === museStaff.measures[measureId]) {
+        // Remove listener for clicking old pointed at column to add notes
+        Object.values(museStaff.measurePointedOn.measure.rows).map( (tr) => {
+            getNonHiddenTds(tr.cells)[museStaff.measurePointedOn.pointer.position].removeEventListener('click', museStaff.inputListener);
+        })
         museStaff.measures[measureId].setPointerPosition(noteNumberIndex)
-        // Make new note containers be clickable
+        // Make new note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(museStaff.measures[measureId].measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
             noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
         })
+        // Add listener for clicking newly pointed column to add notes
+        Object.values(museStaff.measures[measureId].measure.rows).map( (tr) => {
+            getNonHiddenTds(tr.cells)[museStaff.measures[measureId].pointer.position].addEventListener('click', museStaff.inputListener );
+        })
     } else {
-        // Make old pointed measure's recently changed note containers be clickable
+        // Make old pointed measure's recently changed note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(museStaff.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
             noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
@@ -188,5 +215,22 @@ function onNoteClick(e, museStaff) {
     
     // console.log(noteNumberIndex);
     // museMeasure.setPointerPosition(noteNumberIndex);
+}
+
+
+function clickNoteToAddToMeasure(e, museStaff) {
+    // console.log(e.target);
+    // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
+    if(e.target.tagName !== "TD") {
+        return;
+    }
+    const noteRowIndex = e.target.parentNode.rowIndex;
+    const notesBasedOnRow = Object.keys(noteDirection).reverse();
+    const noteValue = notesBasedOnRow[noteRowIndex];
+    const noteUnit = "quarter";
+    console.log("noteRowIndex " + noteRowIndex);
+    console.log("noteValue " + noteValue);
+    const note = new Note(noteValue, noteUnit);
+    museStaff.addNoteAtCurrentMeasurePosition(note);
 }
 

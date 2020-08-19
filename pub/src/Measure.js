@@ -8,7 +8,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(3, 4);
+        this.timeSig = new TimeSignature(4, 4);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -20,7 +20,7 @@ class Measure {
         createMeasure(this);
     }
 
-    inputListener = (e) => clickNoteToAddToMeasure(e, this);
+    // inputListener = (e) => clickNoteToAddToMeasure(e, this);
 
     setNotes(notes) {
         //check if sum of notes note values equivalent or less than columns in measure
@@ -84,9 +84,9 @@ class Measure {
         // console.log("oldPointerColumnLocation:")
         oldPointerColumnLocation.removeChild(oldPointerColumnLocation.firstChild);
 
-        Object.values(this.measure.rows).map( (tr) => {
-            getNonHiddenTds(tr.cells)[oldPointerPosition].removeEventListener('click', this.inputListener);
-        })
+        // Object.values(this.measure.rows).map( (tr) => {
+        //     getNonHiddenTds(tr.cells)[oldPointerPosition].removeEventListener('click', this.inputListener);
+        // })
     }
 
     setPointerPosition(noteNumberIndex) {
@@ -119,12 +119,12 @@ class Measure {
         pointerImg.setAttribute('class', "museMeasurePointerImage");
         pointerImg.setAttribute('src', "src/static/pointer.png");
         getNonHiddenTds(this.measure.querySelector('.museMeasurePointerContainer').cells)[this.pointer.position].appendChild(pointerImg);
-        Object.values(this.measure.rows).map( (tr) => {
-            getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', this.inputListener );
-        })
+        // Object.values(this.measure.rows).map( (tr) => {
+        //     getNonHiddenTds(tr.cells)[this.pointer.position].addEventListener('click', this.inputListener );
+        // })
     }
 
-    addNoteAtCurrentPosition(note) {
+    addNoteAtCurrentPosition(note, noteImage) {
         const columnsToTakeUp = getNoteColumnsToTakeUp(note);
         var noteRowIndex;
         if(note.noteType === "note") {
@@ -135,7 +135,7 @@ class Measure {
             noteRowIndex = 7;
         }
 
-        const noteImage = note.createNoteImage();
+        var noteImage = noteImage || note.createNoteImage();
         if(!noteImage.className.includes("highlighted")){
             noteImage.setAttribute('class', noteImage.className + " highlighted");
         }
@@ -456,18 +456,18 @@ function getNonHiddenTds(cells) {
 // }
 
 
-function clickNoteToAddToMeasure(e, museMeasure) {
-    // console.log(e.target);
-    // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
-    if(e.target.tagName !== "TD") {
-        return;
-    }
-    const noteRowIndex = e.target.parentNode.rowIndex;
-    const notesBasedOnRow = Object.keys(noteDirection).reverse();
-    const noteValue = notesBasedOnRow[noteRowIndex];
-    const noteUnit = "quarter";
-    console.log("noteRowIndex " + noteRowIndex);
-    console.log("noteValue " + noteValue);
-    const note = new Note(noteValue, noteUnit);
-    museMeasure.addNoteAtCurrentPosition(note);
-}
+// function clickNoteToAddToMeasure(e, museMeasure) {
+//     // console.log(e.target);
+//     // when clicking on pointed note (instead of empty place to add note), e.target is <div> and then gives errors
+//     if(e.target.tagName !== "TD") {
+//         return;
+//     }
+//     const noteRowIndex = e.target.parentNode.rowIndex;
+//     const notesBasedOnRow = Object.keys(noteDirection).reverse();
+//     const noteValue = notesBasedOnRow[noteRowIndex];
+//     const noteUnit = "quarter";
+//     console.log("noteRowIndex " + noteRowIndex);
+//     console.log("noteValue " + noteValue);
+//     const note = new Note(noteValue, noteUnit);
+//     museMeasure.addNoteAtCurrentPosition(note);
+// }
