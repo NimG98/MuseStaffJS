@@ -51,13 +51,13 @@ class MuseStaff {
     setMeasurePointedOn(measureIndex, noteNumberIndex) {
         // Remove pointer from old measure
         if(this.measurePointedOn) {
-            console.log(this.measurePointedOn)
+            // console.log(this.measurePointedOn)
             //this.measurePointedOn.setPointerVisible(false);
             this.measurePointedOn.removePointer();
             this.measurePointedOn.setPointerVisible(false);
         }
         this.measurePointedOn = this.measures[measureIndex];
-        console.log(this.measurePointedOn)
+        // console.log(this.measurePointedOn)
         this.measurePointedOn.setPointerVisible(true);
         this.measurePointedOn.setPointerPosition(noteNumberIndex);
 
@@ -143,7 +143,7 @@ function onNoteClick(e, museStaff) {
 
     // Highlight note
     const noteContainer = e.target.parentNode;
-    console.log(noteContainer)
+    // console.log(noteContainer)
     if(noteContainer.tagName === "TD"){
         return;
     }
@@ -177,11 +177,16 @@ function onNoteClick(e, museStaff) {
             noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
         })
     } else {
+        // Make old pointed measure's recently changed note containers be clickable
+        const museMeasureNotes = Array.from(museStaff.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
+        museMeasureNotes.map( (noteContainer) => {
+            noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
+        })
         // Set new measure to be pointed on (and remove pointer from old pointed on measure)
         museStaff.setMeasurePointedOn(measureId, noteNumberIndex);
     }
     
-    console.log(noteNumberIndex);
+    // console.log(noteNumberIndex);
     // museMeasure.setPointerPosition(noteNumberIndex);
 }
 
