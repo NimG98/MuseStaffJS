@@ -5,7 +5,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(3, 2);
+        this.timeSig = new TimeSignature(2, 2);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -258,6 +258,8 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         if(currentTd.nextSibling){
             notePosition += 1;
             needToCallFillRemainingWithRests = pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(newNotes[notePosition]), newNotes, notePosition);
+        } else {
+            needToCallFillRemainingWithRests = true;
         }
     }
 
@@ -419,6 +421,8 @@ function fillRemainingWithRests(museMeasure, rowIndex, noteIndex) {
     const noteNonHiddenTdToAddRestsAfter = getNonHiddenTds(museMeasure.measure.rows[rowIndex].cells)[noteIndex];
     const noteColumnsToTakeUp = getNoteColumnsToTakeUp(museMeasure.notes[noteIndex]);
     var currentTd = noteNonHiddenTdToAddRestsAfter;
+    currentTd.setAttribute('class', currentTd.className.replace("endMeasureLine", ""));
+
     for(var i = 0; i < noteColumnsToTakeUp; i++) {
         var nextSibling = currentTd.nextSibling;
         currentTd = nextSibling;
