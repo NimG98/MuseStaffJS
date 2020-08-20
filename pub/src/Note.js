@@ -50,6 +50,8 @@ class Note {
                     noteContainer.appendChild(noteLineImg);
                 }
             }
+        } else if(this.noteType === "rest") {
+            noteImg.setAttribute("class", noteImg.className + " restImage");
         }
         noteImg.setAttribute("src", noteImgSrc);
 

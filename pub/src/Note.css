@@ -58,3 +58,8 @@ since the flag of the note will be in the wrong direction
     -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
 }
+
+.restImage {
+    margin-top: -40px;
+    max-width: 100%;
+}
