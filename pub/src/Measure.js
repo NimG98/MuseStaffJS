@@ -5,7 +5,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(2, 2);
+        this.timeSig = new TimeSignature(1, 1);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -277,7 +277,7 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, newNotes, po
             //     notePosition -= 1;
             // } else {
             if(!newNotes[notePosition] || newNotes[notePosition].noteType === "rest"){
-                continue;
+                break;
             } else {
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
             ({newNotes, needToCallFillRemainingWithRests} = pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, newNotes, notePosition));
