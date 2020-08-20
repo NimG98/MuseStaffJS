@@ -200,12 +200,18 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         noteImage = currentTd.removeChild(currentTd.firstChild);
         currentTd.setAttribute('class', currentTd.className + " tdHidden");
     }
-    if(numColumnsToPush === 0) {
-        numColumnsToPush = columnsToTakeUp;
-    }
-
-    for(var i = 0; i < numColumnsToPush-1; i++) {
+    // if(numColumnsToPush === 0) {
+    //     numColumnsToPush = columnsToTakeUp;
+    // }
+    var i=0;
+    for(i; i < numColumnsToPush+columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
+        if(i === columnsToTakeUp-1){
+            if(noteImage) {
+                currentTd.appendChild(noteImage)
+            }
+            currentTd.setAttribute('class', currentTd.className.replace(/tdHidden/g, ""));
+        }
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             // if note is a rest, just overwrite it (delete the rest)
@@ -222,13 +228,16 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
                 notePosition -= 1;
             } else {
                 var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
-                pushNoteForward(nextSibling, numColumnsToPush-i-1, newNoteColumnsToTakeUp, newNotes, notePosition);
+                nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+                pushNoteForward(nextSibling, columnsToTakeUp-i-1, newNoteColumnsToTakeUp, newNotes, notePosition);
             }
         }
         currentTd = nextSibling;
     }
-    if(noteImage) {
-        currentTd.appendChild(noteImage)
+    if(i === columnsToTakeUp-1){
+        if(noteImage) {
+            currentTd.appendChild(noteImage)
+        }
     }
     for(var i = 0; i < columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
@@ -238,8 +247,25 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         }
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
+            // // if note is a rest, just overwrite it (delete the rest)
+            // if(newNotes[notePosition].noteType === "rest"){
+            //     // Remove rest note image if on note row with rest image
+            //     if(nextSibling.hasChildNodes()) {
+            //         nextSibling.removeChild(nextSibling.firstChild);
+            //     }
+            //     // Make td hidden, since it's taken over
+            //     nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
+
+            //     newNotes.splice(notePosition, 1)
+            //     // Set notePosition back, since this will no longer be a note
+            //     notePosition -= 1;
+            // } else {
+            if(newNotes[notePosition].noteType === "rest"){
+                continue;
+            } else {
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
             pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, newNotes, notePosition);
+            }
         }
         currentTd = nextSibling;
     }
@@ -291,7 +317,7 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
         currentTd = previousSibling;
     }
     // On td that note is moved backwards to. So make this td unhidden now
-    currentTd.setAttribute('class', currentTd.className.replace("tdHidden", ""));
+    currentTd.setAttribute('class', currentTd.className.replace(/tdHidden/g, ""));
     // If on row where note image needs to be placed, then insert the note image
     if(noteImage) {
         currentTd.appendChild(noteImage);
@@ -441,7 +467,7 @@ function fillRemainingWithRests(museMeasure, rowIndex, noteIndex) {
             tdPointedOn.removeChild(tdPointedOn.firstChild);
         }
         if(tdPointedOn.className.includes("tdHidden")) {
-            tdPointedOn.setAttribute('class', tdPointedOn.className.replace("tdHidden", ""));
+            tdPointedOn.setAttribute('class', tdPointedOn.className.replace(/tdHidden/g, ""));
         }
         const restNote = new Rest(restUnitName)
         const restImage = restNote.createNoteImage();
