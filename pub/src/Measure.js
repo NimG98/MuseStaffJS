@@ -152,7 +152,7 @@ class Measure {
                         tdPointedOn.firstChild;
                     }
                 } */
-                const {newNotes, needToCallFillRemainingWithRests} = pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
+                const {newNotes, needToCallFillRemainingWithRests} = pushNoteForward(tdPointedOn, 0, columnsToTakeUp, [...this.notes], this.pointer.position);
                 // If last row, don't need reference to old this.notes. Can replace this.notes to newNotes
                 // newNotes also affected by if 
                 if(index === Object.values(this.measure.rows).length-1) {
@@ -188,14 +188,15 @@ class Measure {
     }
 }
 
-function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, position) {
+function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, newNotes, position) {
     var currentTd = noteTd;
     var notePosition = position;
     var noteImage = null;
     // Need copy of notes, since if rests are being taken over and deleted from the notes list,
     // when you get to the next row, you still need to see if newNotes[notePosition].noteType === "rest".
     // So, don't modify this.notes, only modify newNotes. Then when all rows are done, then change this.notes to newNotes.
-    var newNotes = [...notes];
+    // var newNotes = [...notes];
+    // var newNotes = notes;
     if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
         currentTd.setAttribute('class', currentTd.className + " tdHidden");
@@ -203,15 +204,29 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     // if(numColumnsToPush === 0) {
     //     numColumnsToPush = columnsToTakeUp;
     // }
+    var unhidTd = false;
     var i=0;
     for(i; i < numColumnsToPush+columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
-        if(i === columnsToTakeUp-1){
+        // if(numColumnsToPush === 0){
+        if(numColumnsToPush !== 0 && i === numColumnsToPush && !unhidTd) {
+            // if(i === numColumnsToPush-1){
             if(noteImage) {
                 currentTd.appendChild(noteImage)
             }
             currentTd.setAttribute('class', currentTd.className.replace(/tdHidden/g, ""));
+            unhidTd = true;
+            // }
         }
+        else if(i === columnsToTakeUp-1 && !unhidTd){
+            if(noteImage) {
+                currentTd.appendChild(noteImage)
+            }
+            currentTd.setAttribute('class', currentTd.className.replace(/tdHidden/g, ""));
+            unhidTd = true;
+        }
+        // }
+        // }
         if(!nextSibling.className.includes("tdHidden")){
             notePosition += 1;
             // if note is a rest, just overwrite it (delete the rest)
@@ -229,7 +244,7 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
             } else {
                 var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
                 nextSibling.setAttribute('class', nextSibling.className + " tdHidden");
-                pushNoteForward(nextSibling, columnsToTakeUp-i-1, newNoteColumnsToTakeUp, newNotes, notePosition);
+                ({newNotes, needToCallFillRemainingWithRests} = pushNoteForward(nextSibling, columnsToTakeUp-i-1+numColumnsToPush, newNoteColumnsToTakeUp, newNotes, notePosition));
             }
         }
         currentTd = nextSibling;
@@ -238,6 +253,7 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
         if(noteImage) {
             currentTd.appendChild(noteImage)
         }
+        // currentTd.setAttribute('class', currentTd.className.replace(/tdHidden/g, ""));
     }
     for(var i = 0; i < columnsToTakeUp-1; i++) {
         var nextSibling = currentTd.nextSibling
@@ -260,11 +276,11 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
             //     // Set notePosition back, since this will no longer be a note
             //     notePosition -= 1;
             // } else {
-            if(newNotes[notePosition].noteType === "rest"){
+            if(!newNotes[notePosition] || newNotes[notePosition].noteType === "rest"){
                 continue;
             } else {
             var newNoteColumnsToTakeUp = getNoteColumnsToTakeUp(newNotes[notePosition]);
-            pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, newNotes, notePosition);
+            ({newNotes, needToCallFillRemainingWithRests} = pushNoteForward(nextSibling, 0, newNoteColumnsToTakeUp, newNotes, notePosition));
             }
         }
         currentTd = nextSibling;
