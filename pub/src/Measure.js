@@ -5,7 +5,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(2, 16);
+        this.timeSig = new TimeSignature(3, 2);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -152,11 +152,14 @@ class Measure {
                         tdPointedOn.firstChild;
                     }
                 } */
-                const newNotes = pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
+                const {newNotes, needToCallFillRemainingWithRests} = pushNoteForward(tdPointedOn, 0, columnsToTakeUp, this.notes, this.pointer.position);
                 // If last row, don't need reference to old this.notes. Can replace this.notes to newNotes
                 // newNotes also affected by if 
                 if(index === Object.values(this.measure.rows).length-1) {
                     this.notes = newNotes;
+                }
+                if(needToCallFillRemainingWithRests){
+                    fillRemainingWithRests(this, index, this.notes.length-1)
                 }
             })
         
@@ -245,17 +248,20 @@ function pushNoteForward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posit
     var hiddenCount = 0;
     var nextSibling = null;
     var notePosition = position;
+    var needToCallFillRemainingWithRests = false;
     while(currentTd.nextSibling && currentTd.nextSibling.className.includes("tdHidden")) {
         var nextSibling = currentTd.nextSibling;
         hiddenCount +=1;
         currentTd = nextSibling;
     }
     if(hiddenCount >= columnsToTakeUp){
-        notePosition += 1;
-        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(newNotes[notePosition]), newNotes, notePosition);
+        if(currentTd.nextSibling){
+            notePosition += 1;
+            needToCallFillRemainingWithRests = pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(newNotes[notePosition]), newNotes, notePosition);
+        }
     }
 
-    return newNotes
+    return {newNotes, needToCallFillRemainingWithRests}
 }
 
 function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, position) {
@@ -268,15 +274,23 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
         return;
     }
 
+    // If on row where the note image that needs to pushed backward is,
+    // then remove the image and store it for later
     if(currentTd.hasChildNodes() && numColumnsToPush !== 0) {
         noteImage = currentTd.removeChild(currentTd.firstChild);
-        currentTd.setAttribute('class', currentTd.className + " tdHidden");
     }
+
+    // Make current td hidden, since moving note to earlier td
+    // currentTd.setAttribute('class', currentTd.className + " tdHidden");
+    currentTd.setAttribute('class', " tdHidden"); // don't do currentTd.className + " tdHidden", since td could have had class endMeasureLine
 
     for(var i = 0; i < numColumnsToPush; i++) {
         var previousSibling = currentTd.previousSibling;
         currentTd = previousSibling;
     }
+    // On td that note is moved backwards to. So make this td unhidden now
+    currentTd.setAttribute('class', currentTd.className.replace("tdHidden", ""));
+    // If on row where note image needs to be placed, then insert the note image
     if(noteImage) {
         currentTd.appendChild(noteImage);
     }
@@ -284,6 +298,7 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
     var hiddenCount = 0;
     var nextSibling = null;
     var notePosition = position;
+    var needToCallFillRemainingWithRests = false;
     while(currentTd.nextSibling && currentTd.nextSibling.className.includes("tdHidden")) {
         var nextSibling = currentTd.nextSibling;
         hiddenCount +=1;
@@ -291,8 +306,14 @@ function pushNoteBackward(noteTd, numColumnsToPush, columnsToTakeUp, notes, posi
     }
     if(hiddenCount >= columnsToTakeUp){
         notePosition += 1;
-        pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(notes[notePosition]), notes, notePosition);
+        if(currentTd.nextSibling){
+            needToCallFillRemainingWithRests = pushNoteBackward(currentTd.nextSibling, hiddenCount-(columnsToTakeUp-1), getNoteColumnsToTakeUp(notes[notePosition]), notes, notePosition);
+        } else {
+            needToCallFillRemainingWithRests = true;
+        }
     }
+
+    return needToCallFillRemainingWithRests;
 }
 
 /* Splits up the measure into the max number of columns according to the beat unit of the min supported note.
@@ -393,22 +414,39 @@ function fillDefaultMeasure(museMeasure){
 
 
 
-function fillRemainingWithRests(museMeasure, noteIndex) {
-    const tdPointedOn = getNonHiddenTds(museMeasure.measure.rows[index].cells)[noteIndex];
-    const beatUnit = museMeasure.timeSig.beatUnit;
-    const restUnitName = Object.keys(noteUnitMaxEquivalents).filter( (noteUnit) => {
-        return noteUnitMaxEquivalents[noteUnit] === beatUnit;
-    })[0];
+function fillRemainingWithRests(museMeasure, rowIndex, noteIndex) {
+    // Get to first hidden td after the last td for the last note in the measure
+    const noteNonHiddenTdToAddRestsAfter = getNonHiddenTds(museMeasure.measure.rows[rowIndex].cells)[noteIndex];
+    const noteColumnsToTakeUp = getNoteColumnsToTakeUp(museMeasure.notes[noteIndex]);
+    var currentTd = noteNonHiddenTdToAddRestsAfter;
+    for(var i = 0; i < noteColumnsToTakeUp; i++) {
+        var nextSibling = currentTd.nextSibling;
+        currentTd = nextSibling;
+    }
+
+    // Type of rest notes to add
+    /* const beatUnit = museMeasure.timeSig.beatUnit;
+    const restUnitName = Object.keys(noteUnitMinEquivalents).filter( (noteUnit) => {
+        return noteUnitMinEquivalents[noteUnit] === beatUnit;
+    })[0]; */
+    const restUnitName = "sixteenth";
     
+    var tdPointedOn = currentTd;
     while(tdPointedOn) {
         if(tdPointedOn.hasChildNodes()) {
             tdPointedOn.removeChild(tdPointedOn.firstChild);
         }
         if(tdPointedOn.className.includes("tdHidden")) {
-            tdPointedOn.setAttribute('class', "");
+            tdPointedOn.setAttribute('class', tdPointedOn.className.replace("tdHidden", ""));
         }
-        const restImage = new Rest(restUnitName).createNoteImage();
-        tdPointedOn.appendChild(restImage);
+        const restNote = new Rest(restUnitName)
+        const restImage = restNote.createNoteImage();
+        if(rowIndex === 7){
+            tdPointedOn.appendChild(restImage);
+        }
+        if(rowIndex === 15) {
+            museMeasure.notes.push(restNote);
+        }
         tdPointedOn = tdPointedOn.nextSibling;
     }
 }

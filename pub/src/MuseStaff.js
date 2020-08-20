@@ -145,6 +145,16 @@ class MuseStaff {
             }
         }
         this.measurePointedOn.addNoteAtCurrentPosition(note, noteImage);
+        // Make new note containers be clickable for changing pointer position
+        const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
+        museMeasureNotes.map( (noteContainer) => {
+            noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
+        })
+        // Add listener for clicking newly pointed column to add notes
+        Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+            getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
+        })
+        // Add end of measure line to last td if note added causes last td with endMeasureLine to change
         if(this.measures.length > 0 && this.measures.indexOf(this.measurePointedOn) !== this.measures.length-1) {
             Object.values(this.measurePointedOn.measure.rows).map( (tr, index) => {
                 if(!tr.className.includes("museMeasurePointerContainer")) {
@@ -226,7 +236,7 @@ function clickNoteToAddToMeasure(e, museStaff) {
     const noteRowIndex = e.target.parentNode.rowIndex;
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
-    const noteUnit = "sixteenth";
+    const noteUnit = "quarter";
     console.log("noteRowIndex " + noteRowIndex);
     console.log("noteValue " + noteValue);
     const note = new Note(noteValue, noteUnit);
