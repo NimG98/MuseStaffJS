@@ -30,3 +30,9 @@ staff3.setNotes(notes);
 // staff3.setEditable(true);
 body.appendChild(staff3.staff);
 
+
+const staff4 = new MuseStaff();
+staff4.addMeasure();
+staff4.setEditable(true);
+
+body.appendChild(staff4.staff);
