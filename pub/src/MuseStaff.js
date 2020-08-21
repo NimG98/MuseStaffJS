@@ -23,6 +23,7 @@ class MuseStaff {
     addNoteTdHoverListener = (e) => displayNoteTdHover(e, "mouseover");
     removeNoteTdHoverListener = (e) => displayNoteTdHover(e, "mouseout");
     changeInsertNoteTypeListener = (e) => clickToChangeInsertNoteType(e, this);
+    changePointerListener = (e) => onNoteClick(e, this);
 
     /* Parses the string timeSigString (e.g. '3/4') into TimeSignature */
     parseTimeSignature(timeSigString) {
@@ -36,18 +37,25 @@ class MuseStaff {
         }
     }
 
+    setNotes(notes) {
+        this.measures = []
+        this.measurePointedOn = null;
+        this.addMeasure();
+        this.setMeasurePointedOn(0, 0);
+        notes.map( (note) => {
+            this.addNoteAtCurrentMeasurePosition(note);
+        })
+    }
+
     setEditable(editable) {
         this.editable = editable;
-        this.measures.map( (museMeasure) => {
-            museMeasure.setMeasureEditable(editable);
-        })
         if(editable && this.measures.length > 0) {
             this.setMeasurePointedOn(0, 0)
             // Make note containers be clickable for changing pointer position
             this.measures.map( (museMeasure) => {
                 const museMeasureNotes = Array.from(museMeasure.measure.querySelectorAll(".museStaffNote"));
                 museMeasureNotes.map( (noteContainer) => {
-                    noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
+                    noteContainer.addEventListener('click', this.changePointerListener );
                 })
             })
             // Add listener for clicking newly pointed column to add notes
@@ -64,7 +72,30 @@ class MuseStaff {
             Array.from(noteSelector.querySelectorAll(".museStaffNote")).map( (selectorNote) => {
                 selectorNote.addEventListener('click', this.changeInsertNoteTypeListener);
             });
+        } else {
+            if(this.staff.querySelector(".noteSelectorDisplay")){
+                this.staff.removeChild(this.staff.querySelector(".noteSelectorDisplay"));
+            }
+            if(this.measurePointedOn) {
+                const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
+                museMeasureNotes.map( (noteContainer) => {
+                    noteContainer.removeEventListener('click', this.changePointerListener );
+                })
+
+                this.measurePointedOn.removePointer();
+                // Remove listener for clicking old pointed at column to add notes
+                Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+                    getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('click', this.addNoteClickListener);
+                    getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('mouseover', this.addNoteTdHoverListener );
+                    getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('mouseout', this.removeNoteTdHoverListener );
+                })
+                this.measurePointedOn.setPointerVisible(false);
+                this.measurePointedOn = null;
+            }
         }
+        this.measures.map( (museMeasure) => {
+            museMeasure.setMeasureEditable(editable);
+        })
     }
 
     /*  
@@ -151,7 +182,7 @@ class MuseStaff {
         // Make new note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
-            noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
+            noteContainer.addEventListener('click', this.changePointerListener );
         })
         // Add listener for clicking newly pointed column to add notes
         Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
@@ -204,7 +235,7 @@ class MuseStaff {
 
         const noteImage = note.createNoteImage();
         // Make new note container be clickable for changing pointer position
-        noteImage.addEventListener('click', (e) => onNoteClick(e, this) );
+        noteImage.addEventListener('click', this.changePointerListener );
         if(!noteImage.className.includes("highlighted")){
             noteImage.setAttribute('class', noteImage.className + " highlighted");
         }
@@ -280,7 +311,7 @@ class MuseStaff {
             // Make new note containers be clickable for changing pointer position
             const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
             museMeasureNotes.map( (noteContainer) => {
-                noteContainer.addEventListener('click', (e) => onNoteClick(e, this) );
+                noteContainer.addEventListener('click', this.changePointerListener );
             })
             // Add listener for clicking newly pointed column to add notes
             Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
@@ -348,7 +379,7 @@ function onNoteClick(e, museStaff) {
         // Make new note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(museStaff.measures[measureId].measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
-            noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
+            noteContainer.addEventListener('click', museStaff.changePointerListener );
         })
         // Add listener for clicking newly pointed column to add notes
         Object.values(museStaff.measures[measureId].measure.rows).map( (tr) => {
@@ -360,7 +391,7 @@ function onNoteClick(e, museStaff) {
         // Make old pointed measure's recently changed note containers be clickable for changing pointer position
         const museMeasureNotes = Array.from(museStaff.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
         museMeasureNotes.map( (noteContainer) => {
-            noteContainer.addEventListener('click', (e) => onNoteClick(e, museStaff) );
+            noteContainer.addEventListener('click', museStaff.changePointerListener );
         })
         // Set new measure to be pointed on (and remove pointer from old pointed on measure)
         museStaff.setMeasurePointedOn(measureId, noteNumberIndex);

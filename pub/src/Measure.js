@@ -17,15 +17,6 @@ class Measure {
         createMeasure(this);
     }
 
-    setNotes(notes) {
-        //check if sum of notes note values equivalent or less than columns in measure
-        // if less than measure, fill remaining with Rests
-
-
-        // assign notes to this.notes
-        this.notes = notes;
-    }
-
     setClefType(clefType) {
         this.clef = clefType;
     }
