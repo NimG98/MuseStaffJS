@@ -5,7 +5,7 @@ class Measure {
     constructor() {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(1, 1);
+        this.timeSig = new TimeSignature(2, 2);
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
@@ -185,6 +185,37 @@ class Measure {
             this.notes.splice(this.pointer.position, 0, note);
         }
         
+    }
+
+    /* Remove all notes starting from the note at the specified index and then notes after the index */
+    removeNotesStartingFromIndex(removeIndex) {
+        // no point of removing everything starting from index 0 since it will be the same measure
+        if(removeIndex === 0) {
+            return;
+        }
+        
+        // Set pointer position of measure to be before the removed notes
+        this.setPointerPosition(removeIndex-1);
+
+        // Start removing from removeIndex to end of this.notes
+        for(var i=removeIndex; i < this.notes.length; i++) {
+            Object.values(this.measure.rows).map( (tr, currentRowindex) => {
+                // Since each removed note's td is becoming hidden, the number of non hidden tds decrease.
+                // So, getNonHiddenTds(...)[removeIndex] instead of getNonHiddenTds(...)[i]
+                const currentTd = getNonHiddenTds(this.measure.rows[currentRowindex].cells)[removeIndex];
+                // Remove note image
+                if(currentTd.hasChildNodes() && !currentTd.parentNode.className.includes("museMeasurePointerContainer")) {
+                    currentTd.removeChild(currentTd.firstChild);
+                }
+                // Make td hidden
+                currentTd.setAttribute('class', " tdHidden");
+            })
+        }
+        this.notes.splice(removeIndex, this.notes.length-removeIndex);
+        // Fill remainder of measure with rests
+        Object.values(this.measure.rows).map( (tr, currentRowindex) => {
+            fillRemainingWithRests(this, currentRowindex, removeIndex-1);
+        })
     }
 }
 
