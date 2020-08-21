@@ -41,10 +41,23 @@ class MuseStaff {
         this.measures = []
         this.measurePointedOn = null;
         this.addMeasure();
-        this.setMeasurePointedOn(0, 0);
+        this.setEditable(true);
+        var i=0;
+        var currentMeasureIndex = this.measures.indexOf(this.measurePointedOn);
         notes.map( (note) => {
             this.addNoteAtCurrentMeasurePosition(note);
+            i += 1;
+            if(currentMeasureIndex !== this.measures.indexOf(this.measurePointedOn)){
+                if(this.measurePointedOn.notes.length === 1) {
+                    i=0;
+                } else {
+                    i=1;
+                }
+            }
+            currentMeasureIndex = this.measures.indexOf(this.measurePointedOn)
+            this.setMeasurePointedOn(this.measures.indexOf(this.measurePointedOn), i);
         })
+        this.setEditable(false);
     }
 
     setEditable(editable) {
