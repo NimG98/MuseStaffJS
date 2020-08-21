@@ -31,7 +31,9 @@ class Note {
             // whole note doesn't have stem, and has preset pictures with the note lines
             if (noteDirection[this.noteValue].line && noteShapeByUnit[this.noteType][this.noteUnit].line) {
                 noteImgSrc = noteShapeByUnit[this.noteType][this.noteUnit].line[noteDirection[this.noteValue].line.start];
-            // non whole notes
+            }
+            if(this.noteUnit === "whole") {
+                noteImg.setAttribute("class", noteImg.className + " wholeNoteImage");
             } else {
                 // downward stem notes
                 if(noteDirection[this.noteValue].stemDownwards) {
