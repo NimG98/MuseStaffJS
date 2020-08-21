@@ -90,6 +90,7 @@ class MuseStaff {
                 this.staff.removeChild(this.staff.querySelector(".noteSelectorDisplay"));
             }
             if(this.measurePointedOn) {
+                // Remove listener for changing pointer position
                 const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
                 museMeasureNotes.map( (noteContainer) => {
                     noteContainer.removeEventListener('click', this.changePointerListener );
@@ -105,6 +106,13 @@ class MuseStaff {
                 this.measurePointedOn.setPointerVisible(false);
                 this.measurePointedOn = null;
             }
+            // Might need to remove listener from previous measure (in case of overflow) for changing pointer position
+            this.measures.map( (museMeasure) => {
+                const museMeasureNotes = Array.from(museMeasure.measure.querySelectorAll(".museStaffNote"));
+                museMeasureNotes.map( (noteContainer) => {
+                    noteContainer.removeEventListener('click', this.changePointerListener );
+                })
+            })
         }
         this.measures.map( (museMeasure) => {
             museMeasure.setMeasureEditable(editable);
@@ -315,10 +323,12 @@ class MuseStaff {
                 // Remove overflowed notes from current measure and fill remainder of the measure with rests
                 this.measurePointedOn.removeNotesStartingFromIndex(noteIndexToOverflow);
                 // If needed to fill remainder of measure with rests, make those new rest note containers be clickable for changing pointer position
-                const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
-                museMeasureNotes.map( (noteContainer) => {
-                    noteContainer.addEventListener('click', this.changePointerListener );
-                })
+                if(this.editable) {
+                    const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
+                    museMeasureNotes.map( (noteContainer) => {
+                        noteContainer.addEventListener('click', this.changePointerListener );
+                    })
+                }
                 // Add note inside measure if it is supposed to fit
                 if(addNoteToCurrentMeasure) {
                     this.addNoteAtCurrentMeasurePosition(note);
