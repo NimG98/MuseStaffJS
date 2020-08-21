@@ -172,6 +172,12 @@ class MuseStaff {
 
         const numOfMeasureNoteColumns = this.measurePointedOn.measure.rows[0].cells.length;
         const columnsToTakeUp = getNoteColumnsToTakeUp(note);
+
+        if(columnsToTakeUp > numOfMeasureNoteColumns) {
+            alert("Note is too big to fit inside any measure");
+            return
+        }
+        
         var numOfCurrentFilledNoteColumns = 0;
         var overflowed = false;
         var notesToOverflow = [];
