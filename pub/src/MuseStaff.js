@@ -57,6 +57,14 @@ class MuseStaff {
                 getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseout', this.removeNoteTdHoverListener );
             })
         }
+        if(editable){
+            const noteSelector = createNoteTypeSelectionDisplay(this.insertNoteType);
+            // this.staff.appendChild(noteSelector);
+            this.staff.insertBefore(noteSelector, this.staff.children[0]);
+            Array.from(noteSelector.querySelectorAll(".museStaffNote")).map( (selectorNote) => {
+                selectorNote.addEventListener('click', this.changeInsertNoteTypeListener);
+            });
+        }
     }
 
     /*  
@@ -162,11 +170,13 @@ class MuseStaff {
         this.staff = museStaffDiv;
 
         // Add note type selector
-        const noteSelector = createNoteTypeSelectionDisplay(this.insertNoteType);
-        this.staff.appendChild(noteSelector);
-        Array.from(noteSelector.querySelectorAll(".museStaffNote")).map( (selectorNote) => {
-            selectorNote.addEventListener('click', this.changeInsertNoteTypeListener);
-        });
+        if(this.editable) {
+            const noteSelector = createNoteTypeSelectionDisplay(this.insertNoteType);
+            this.staff.appendChild(noteSelector);
+            Array.from(noteSelector.querySelectorAll(".museStaffNote")).map( (selectorNote) => {
+                selectorNote.addEventListener('click', this.changeInsertNoteTypeListener);
+            });
+        }
 
         // Add staff properties (clef and time signature)
         const staffPropertyDiv = createStaffPropertyDisplay("treble", this.timeSig)
