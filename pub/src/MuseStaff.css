@@ -1,4 +1,12 @@
-@import url(//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT);
+/* @import url(//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT); */
+@font-face {font-family: "Engravers MT";
+    src: url("fonts/3135c98efb051f346203c2f2ed708638.eot"); /* IE9*/
+    src: url("fonts/3135c98efb051f346203c2f2ed708638.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("fonts/3135c98efb051f346203c2f2ed708638.woff2") format("woff2"), /* chrome、firefox */
+    url("fonts/3135c98efb051f346203c2f2ed708638.woff") format("woff"), /* chrome、firefox */
+    url("fonts/3135c98efb051f346203c2f2ed708638.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url("fonts/3135c98efb051f346203c2f2ed708638.svg#Engravers MT") format("svg"); /* iOS 4.1- */
+}
 
 .museStaffPropertySection {
     /* width:100%;
