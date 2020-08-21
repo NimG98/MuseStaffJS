@@ -10,7 +10,7 @@ const body = document.querySelector('body')
 body.appendChild(staff.staff);
 
 
-const staff2 = new MuseStaff("2/2");
+const staff2 = new MuseStaff("2/16");
 staff2.setEditable(true);
 staff2.addMeasure();
 staff2.addMeasure();

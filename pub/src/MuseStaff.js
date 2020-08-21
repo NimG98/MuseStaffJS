@@ -21,7 +21,7 @@ class MuseStaff {
 
     /* Parses the string timeSigString (e.g. '3/4') into TimeSignature */
     parseTimeSignature(timeSigString) {
-        if(/^\d\/\d$/.test(timeSigString)){
+        if(/^\d+\/\d+$/.test(timeSigString)){
             const [beatsPerMeasure, beatUnit] = timeSigString.split("/");
             console.log(beatsPerMeasure, beatUnit)
             const timeSignature = new TimeSignature(parseInt(beatsPerMeasure), parseInt(beatUnit));
@@ -113,7 +113,7 @@ class MuseStaff {
             this.setMeasurePointedOn(measureIndex, 0);
         }
 
-        this.staff.insertBefore(measure.measure, this.staff.children[measureIndex]);
+        this.staff.insertBefore(measure.measure, this.staff.querySelectorAll(".museMeasure")[measureIndex]);
     }
 
     setMeasurePointedOn(measureIndex, noteNumberIndex) {
@@ -149,6 +149,10 @@ class MuseStaff {
         const museStaffDiv = document.createElement('div');
         museStaffDiv.setAttribute("class", "museStaff");
         this.staff = museStaffDiv;
+
+        // Add staff properties (clef and time signature)
+        const staffPropertyDiv = createStaffPropertyDisplay("treble", this.timeSig)
+        this.staff.appendChild(staffPropertyDiv)
 
         // append Measure <table> elements to MuseStaff div container
         measureTableArray.map( (measureTable) => {
@@ -331,3 +335,68 @@ function clickNoteToAddToMeasure(e, museStaff) {
     museStaff.addNoteAtCurrentMeasurePosition(note);
 }
 
+function createStaffPropertyDisplay(clefType, timeSignature) {
+
+    const staffPropertyDiv = document.createElement("div");
+    staffPropertyDiv.setAttribute("class", "museStaffPropertySection")
+
+    // Clef display
+    const clefDiv = createClefDisplay(clefType);
+    staffPropertyDiv.appendChild(clefDiv);
+
+    // Time signature display
+    const timeSigDiv = createTimeSignatureDisplay(timeSignature)
+    staffPropertyDiv.appendChild(timeSigDiv);
+
+    // Create ledger lines that staff properties will be placed on top of
+    const numOfRows = 15;
+    const staffPropertyLinesSection = document.createElement('table');
+    staffPropertyLinesSection.setAttribute('class', 'staffPropertyLinesSection');
+    const tbody = document.createElement('tbody');
+    staffPropertyLinesSection.appendChild(tbody);
+
+    for(var i = 0; i < numOfRows+1; i++) {
+        const noteRow = document.createElement('tr');
+        tbody.appendChild(noteRow);
+        // note rows with staff lines
+        if(i == 3 || i === 5 || i === 7 || i === 9 || i === 11) {
+            const line = document.createElement('div');
+            line.setAttribute('class', 'museMeasureLine');
+            noteRow.appendChild(line);
+        }
+        noteRow.appendChild(document.createElement("td"));
+    }
+    staffPropertyDiv.appendChild(staffPropertyLinesSection);
+
+    return staffPropertyDiv;
+}
+
+function createClefDisplay(clefType) {
+    const clefDiv = document.createElement("div");
+    clefDiv.setAttribute("class", "clefDisplay");
+
+    const clefImage = document.createElement("img");
+    clefImage.setAttribute("class", "clefImage")
+    if(clefType === "treble") {
+        clefImage.setAttribute("src", "src/static/clef-treble.png");
+    }
+    clefDiv.appendChild(clefImage);
+
+    return clefDiv;
+}
+
+function createTimeSignatureDisplay(timeSignature){
+    const timeSigDiv = document.createElement("div");
+    timeSigDiv.setAttribute("class", "timeSignatureDisplay")
+
+    const beatsPerMeasureText = document.createElement("p");
+    beatsPerMeasureText.innerHTML = timeSignature.beatsPerMeasure;
+    
+    const beatUnitText = document.createElement("p");
+    beatUnitText.innerHTML = timeSignature.beatUnit;
+
+    timeSigDiv.appendChild(beatsPerMeasureText);
+    timeSigDiv.appendChild(beatUnitText);
+
+    return timeSigDiv;
+}

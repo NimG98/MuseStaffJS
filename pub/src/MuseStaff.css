@@ -1,0 +1,73 @@
+@import url(//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT);
+
+.museStaffPropertySection {
+    /* width:100%;
+    height:100%; */
+    /* align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex; */
+    display: inline;
+}
+
+.clefDisplay {
+    position: absolute;
+    width:60px;
+    height:200px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+    margin-top: 50px;
+
+}
+
+.clefImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.timeSignatureDisplay {
+    margin-top: 100px;
+    position: absolute;
+    margin-left: 70px;
+}
+
+.timeSignatureDisplay p {
+    font-family: "Engravers MT";
+    font-size: 60px;
+    margin-top: -10px;
+    margin-bottom: -20px;
+    text-align: center;
+}
+
+.staffPropertyLinesSection {
+    margin-right: 20px;
+    width: 100px;
+    height: 100px;
+    border-collapse: collapse;
+    display: inline-table;
+}
+
+.staffPropertyLinesSection tr .museMeasureLine {
+    width: 120%;
+    border-top: 1px solid black;
+    position: absolute;
+    left: 0;
+}
+
+.staffPropertyLinesSection tr {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    height: 20px;
+    position: relative;
+}
+
+.staffPropertyLinesSection td {
+    width: 100%;
+    height: 100%;
+}
