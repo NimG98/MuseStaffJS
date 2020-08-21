@@ -2,7 +2,7 @@
 const body = document.querySelector('body')
 
 
-/* const staff = new MuseStaff();
+const staff = new MuseStaff();
 // staff.setEditable(true);
 staff.addMeasure();
 staff.addMeasure();
@@ -10,15 +10,15 @@ staff.addMeasure();
 staff.setEditable(true);
 // staff.setEditable(false);
 // staff.setEditable(true);
-body.appendChild(staff.staff); */
+body.appendChild(staff.staff);
 
 
-/* const staff2 = new MuseStaff("2/16");
+const staff2 = new MuseStaff("2/16");
 staff2.setEditable(true);
 staff2.addMeasure();
 staff2.addMeasure();
 staff2.addMeasure();
-body.appendChild(staff2.staff); */
+body.appendChild(staff2.staff);
 
 
 const staff3 = new MuseStaff("5/4");

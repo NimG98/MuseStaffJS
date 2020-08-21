@@ -299,8 +299,26 @@ class MuseStaff {
                 alert("Note is too big to fit inside any measure");
                 return
             } else {
+                // Remove listener for clicking old pointed at column to add notes
+                Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
+                    getNonHiddenTds(tr.cells).map( (td) => {
+                        // When overflowed after clicking note, mouseout doesn't get to happen for where tdHover was happening.
+                        // So manually remove the hover color
+                        td.style.backgroundColor = "";
+                        td.style.opacity = "";
+
+                        td.removeEventListener('click', this.addNoteClickListener);
+                        td.removeEventListener('mouseover', this.addNoteTdHoverListener );
+                        td.removeEventListener('mouseout', this.removeNoteTdHoverListener );
+                    })
+                })
                 // Remove overflowed notes from current measure and fill remainder of the measure with rests
                 this.measurePointedOn.removeNotesStartingFromIndex(noteIndexToOverflow);
+                // If needed to fill remainder of measure with rests, make those new rest note containers be clickable for changing pointer position
+                const museMeasureNotes = Array.from(this.measurePointedOn.measure.querySelectorAll(".museStaffNote"));
+                museMeasureNotes.map( (noteContainer) => {
+                    noteContainer.addEventListener('click', this.changePointerListener );
+                })
                 // Add note inside measure if it is supposed to fit
                 if(addNoteToCurrentMeasure) {
                     this.addNoteAtCurrentMeasurePosition(note);
