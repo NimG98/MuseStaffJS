@@ -377,11 +377,11 @@ function displayNoteTdHover(e, mouseAction) {
     }
     if(mouseAction === "mouseover") {
         elementToHighlight.style.backgroundColor = "#EFDAFF";
-        // elementToHighlight.style.zIndex = "-1";
+        elementToHighlight.style.opacity = "0.6";
     }
     if(mouseAction === "mouseout") {
         elementToHighlight.style.backgroundColor = "";
-        // elementToHighlight.style.zIndex = "";
+        elementToHighlight.style.opacity = "";
     }
 }
 
