@@ -12,6 +12,8 @@ class MuseStaff {
             this.timeSig = new TimeSignature(4, 4);
         }
 
+        this.insertNoteType = "quarter";
+
         this.staff = null;
         this.display();
         
@@ -20,6 +22,7 @@ class MuseStaff {
     addNoteClickListener = (e) => clickNoteToAddToMeasure(e, this);
     addNoteTdHoverListener = (e) => displayNoteTdHover(e, "mouseover");
     removeNoteTdHoverListener = (e) => displayNoteTdHover(e, "mouseout");
+    changeInsertNoteTypeListener = (e) => clickToChangeInsertNoteType(e, this);
 
     /* Parses the string timeSigString (e.g. '3/4') into TimeSignature */
     parseTimeSignature(timeSigString) {
@@ -158,6 +161,13 @@ class MuseStaff {
         museStaffDiv.setAttribute("class", "museStaff");
         this.staff = museStaffDiv;
 
+        // Add note type selector
+        const noteSelector = createNoteTypeSelectionDisplay(this.insertNoteType);
+        this.staff.appendChild(noteSelector);
+        Array.from(noteSelector.querySelectorAll(".museStaffNote")).map( (selectorNote) => {
+            selectorNote.addEventListener('click', this.changeInsertNoteTypeListener);
+        });
+
         // Add staff properties (clef and time signature)
         const staffPropertyDiv = createStaffPropertyDisplay("treble", this.timeSig)
         this.staff.appendChild(staffPropertyDiv)
@@ -167,6 +177,17 @@ class MuseStaff {
             this.staff.appendChild(measureTable);
         })
         return this.staff;
+    }
+
+    changeInsertNoteType(noteType) {
+        if(noteType === this.insertNoteType) {
+            return;
+        }
+        // Remove selection highlight from old note type
+        const oldInsertNoteContainer = this.staff.querySelector("#" + this.insertNoteType + "Note");
+        oldInsertNoteContainer.setAttribute("class", "museStaffNote")
+
+        this.insertNoteType = noteType;
     }
 
     addNoteAtCurrentMeasurePosition(note) {
@@ -355,7 +376,7 @@ function clickNoteToAddToMeasure(e, museStaff) {
     
     const notesBasedOnRow = Object.keys(noteDirection).reverse();
     const noteValue = notesBasedOnRow[noteRowIndex];
-    const noteUnit = "quarter";
+    const noteUnit = museStaff.insertNoteType;
     console.log("noteRowIndex " + noteRowIndex);
     console.log("noteValue " + noteValue);
     const note = new Note(noteValue, noteUnit);
@@ -449,4 +470,59 @@ function createTimeSignatureDisplay(timeSignature){
     timeSigDiv.appendChild(beatUnitText);
 
     return timeSigDiv;
+}
+
+function createNoteTypeSelectionDisplay(insertNoteType) {
+    const noteSelectionDisplay = document.createElement("div");
+    noteSelectionDisplay.setAttribute("class", "noteSelectorDisplay");
+
+    const noteSelectionHeader = document.createElement("h3");
+    noteSelectionHeader.setAttribute("class", "noteSelectorHeader");
+    noteSelectionHeader.innerHTML = "Notes:"
+
+    const noteSelectionDiv = document.createElement("div");
+    noteSelectionDiv.setAttribute("class", "noteSelector");
+
+    Object.keys(noteShapeByUnit.note).map( noteUnit => {
+        const noteDiv = document.createElement("div");
+        noteDiv.setAttribute("class", "museStaffNote");
+        noteDiv.setAttribute("id", noteUnit + "Note");
+
+        const imgSrc = noteShapeByUnit.note[noteUnit].image;
+        const noteImg = document.createElement("img");
+        noteImg.setAttribute("class", "museStaffNoteImage");
+        noteImg.setAttribute("src", imgSrc);
+
+        if(insertNoteType === noteUnit) {
+            if(!noteDiv.className.includes("noteSelectorHighlighted")){
+                noteDiv.setAttribute("class", noteDiv.className + " noteSelectorHighlighted")
+            }
+        }
+
+        noteDiv.appendChild(noteImg);
+        noteSelectionDiv.appendChild(noteDiv);
+    })
+
+    noteSelectionDisplay.appendChild(noteSelectionHeader);
+    noteSelectionDisplay.appendChild(noteSelectionDiv);
+
+    return noteSelectionDisplay;
+}
+
+function clickToChangeInsertNoteType(e, museStaff) {
+    console.log(e.target);
+    var noteContainer;
+    if(e.target.tagName === "IMG") {
+        noteContainer = e.target.parentNode;
+    } else {
+        noteContainer = e.target
+    }
+    if(!noteContainer.className.includes("noteSelectorHighlighted")){
+        noteContainer.setAttribute('class', noteContainer.className + " noteSelectorHighlighted");
+        console.log(noteContainer.className)
+    }
+
+    const noteType = noteContainer.id.replace("Note", "");
+    console.log(noteType)
+    museStaff.changeInsertNoteType(noteType);
 }
