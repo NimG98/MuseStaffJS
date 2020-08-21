@@ -48,6 +48,8 @@ class MuseStaff {
             // Add listener for clicking newly pointed column to add notes
             Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
                 getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
             })
         }
     }
@@ -123,6 +125,8 @@ class MuseStaff {
             // Remove listener for clicking old pointed at column to add notes
             Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
                 getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('click', this.inputListener);
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].removeEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
             })
             this.measurePointedOn.setPointerVisible(false);
             
@@ -139,6 +143,8 @@ class MuseStaff {
         // Add listener for clicking newly pointed column to add notes
         Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
             getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
+            getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+            getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
         })
     }
 
@@ -246,6 +252,8 @@ class MuseStaff {
             // Add listener for clicking newly pointed column to add notes
             Object.values(this.measurePointedOn.measure.rows).map( (tr) => {
                 getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('click', this.inputListener );
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+                getNonHiddenTds(tr.cells)[this.measurePointedOn.pointer.position].addEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
             })
             // Add end of measure line to last td if note added causes last td with endMeasureLine to change
             if(this.measures.length > 0 && this.measures.indexOf(this.measurePointedOn) !== this.measures.length-1) {
@@ -300,6 +308,8 @@ function onNoteClick(e, museStaff) {
         // Remove listener for clicking old pointed at column to add notes
         Object.values(museStaff.measurePointedOn.measure.rows).map( (tr) => {
             getNonHiddenTds(tr.cells)[museStaff.measurePointedOn.pointer.position].removeEventListener('click', museStaff.inputListener);
+            getNonHiddenTds(tr.cells)[museStaff.measurePointedOn.pointer.position].removeEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+            getNonHiddenTds(tr.cells)[museStaff.measurePointedOn.pointer.position].removeEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
         })
         museStaff.measures[measureId].setPointerPosition(noteNumberIndex)
         // Make new note containers be clickable for changing pointer position
@@ -310,6 +320,8 @@ function onNoteClick(e, museStaff) {
         // Add listener for clicking newly pointed column to add notes
         Object.values(museStaff.measures[measureId].measure.rows).map( (tr) => {
             getNonHiddenTds(tr.cells)[museStaff.measures[measureId].pointer.position].addEventListener('click', museStaff.inputListener );
+            getNonHiddenTds(tr.cells)[museStaff.measures[measureId].pointer.position].addEventListener('mouseover', (e) => displayNoteTdHover(e, "mouseover") );
+            getNonHiddenTds(tr.cells)[museStaff.measures[measureId].pointer.position].addEventListener('mouseout', (e) => displayNoteTdHover(e, "mouseout") );
         })
     } else {
         // Make old pointed measure's recently changed note containers be clickable for changing pointer position
@@ -339,6 +351,21 @@ function clickNoteToAddToMeasure(e, museStaff) {
     console.log("noteValue " + noteValue);
     const note = new Note(noteValue, noteUnit);
     museStaff.addNoteAtCurrentMeasurePosition(note);
+}
+
+function displayNoteTdHover(e, mouseAction) {
+    if(e.target.tagName !== "TD") {
+        return;
+    }
+    if(e.target.parentNode.className.includes("museMeasurePointerContainer")){
+        return;
+    }
+    if(mouseAction === "mouseover") {
+        e.target.style.backgroundColor = "#EFDAFF";
+    }
+    if(mouseAction === "mouseout") {
+        e.target.style.backgroundColor = "";
+    }
 }
 
 function createStaffPropertyDisplay(clefType, timeSignature) {
