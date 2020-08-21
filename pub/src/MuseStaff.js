@@ -1,9 +1,16 @@
 class MuseStaff {
-    constructor() {
+    constructor(timeSig) {
+
         // this.measures = [Measure(), Measure(), Measure()...]
         this.measures = [];
         this.measurePointedOn = null;
         this.editable = false;
+
+        if(timeSig){
+            this.timeSig = this.parseTimeSignature(timeSig);
+        } else {
+            this.timeSig = new TimeSignature(4, 4);
+        }
 
         this.staff = null;
         this.display();
@@ -11,6 +18,18 @@ class MuseStaff {
     }
 
     inputListener = (e) => clickNoteToAddToMeasure(e, this);
+
+    /* Parses the string timeSigString (e.g. '3/4') into TimeSignature */
+    parseTimeSignature(timeSigString) {
+        if(/^\d\/\d$/.test(timeSigString)){
+            const [beatsPerMeasure, beatUnit] = timeSigString.split("/");
+            console.log(beatsPerMeasure, beatUnit)
+            const timeSignature = new TimeSignature(parseInt(beatsPerMeasure), parseInt(beatUnit));
+            return timeSignature;
+        } else {
+            throw new Error(`The provided time signature is not in proper format: '${timeSigString}'. Try providing a time signature that follows this pattern: '3/4'`);
+        }
+    }
 
     setEditable(editable) {
         this.editable = editable;
@@ -44,7 +63,7 @@ class MuseStaff {
             throw new Error("Measure cannot be inserted into an invalid position: " + measureIndex);
         }
         // var measure = measure || new Measure();
-        var measure = new Measure();
+        var measure = new Measure(this.timeSig);
 
         // Sets the measure to be editable or not based off of the staff's this.editable property 
         measure.setMeasureEditable(this.editable)

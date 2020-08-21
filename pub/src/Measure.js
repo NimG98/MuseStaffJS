@@ -2,10 +2,10 @@
 "use strict";
 
 class Measure {
-    constructor() {
+    constructor(timeSig) {
         this.notes = [];
         this.clef = "treble";
-        this.timeSig = new TimeSignature(2, 2);
+        this.timeSig = timeSig;
         this.measure = null;
         this.lyrics = [];
         this.editable = false;
