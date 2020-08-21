@@ -1,0 +1,69 @@
+.museStaffNote {
+    position: relative;
+    width:100%;
+    height:100%;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+.museStaffNoteImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.museStaffNoteLineImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.museStaffNoteDotImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.rotate180 {
+    transform: rotate(180deg) translate(-100%, -100%);
+    -webkit-transform: rotate(180deg) translate(-100%, -100%);
+    -ms-transform: rotate(180deg) translateX(-100%, -100%);
+    margin-left: -100px;
+    margin-top: -120px;
+}
+
+/* For downward stem 8th and 16th notes that you can't rotate the original downward stem note for,
+since the flag of the note will be in the wrong direction
+*/
+.rotate180Image {
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.vertReflect {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+}
+
+.restImage {
+    margin-top: -40px;
+    max-width: 100%;
+}
+
+.wholeNoteImage {
+    margin-top: 0px;
+}

@@ -5,5 +5,8 @@
   },
   "docs-other": {
     "Set-up": ["gettingStartedDoc"]
+  },
+  "examples": {
+    "MuseStaff Creation": ["examplePage1"]
   }
 }

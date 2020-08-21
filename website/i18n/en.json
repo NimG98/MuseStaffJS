@@ -5,21 +5,9 @@
     "previous": "Previous",
     "tagline": "A front-end JavaScript Library for displaying and modifying musical staves",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
-      },
-      "doc2": {
-        "title": "document number 2"
-      },
-      "doc3": {
-        "title": "This is document number 3"
-      },
-      "doc4": {
-        "title": "Other Document"
-      },
-      "doc5": {
-        "title": "Fifth Document"
+      "examplePage1": {
+        "title": "Examples",
+        "sidebar_label": "Time Signature"
       },
       "gettingStartedDoc": {
         "title": "Getting Started",
@@ -58,7 +46,8 @@
     "categories": {
       "MuseStaff": "MuseStaff",
       "Other Classes": "Other Classes",
-      "Set-up": "Set-up"
+      "Set-up": "Set-up",
+      "MuseStaff Creation": "MuseStaff Creation"
     }
   },
   "pages-strings": {

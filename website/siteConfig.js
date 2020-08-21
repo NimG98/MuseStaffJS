@@ -36,7 +36,7 @@ const siteConfig = {
   headerLinks: [
     {doc: 'gettingStartedDoc', label: 'Getting started'},
     {doc: 'museStaffDoc1', label: 'API Docs'},
-    {page: 'help', label: 'Examples'},
+    {doc: 'examplePage1', label: 'Examples'},
   ],
 
   // If you have users set above, you add it here:
@@ -78,10 +78,17 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js',
   'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js',
-  '/js/code-blocks-buttons.js'],
+  '/js/code-blocks-buttons.js',
+  {
+    src: '/js/MuseStaff.js',
+    defer: true,},
+  {
+    src: '/js/examples.js',
+    defer: true,
+  }],
   // scripts: ['https://buttons.github.io/buttons.js'],
 
-  stylesheets: ['/css/code-blocks-buttons.css'],
+  stylesheets: ['/css/code-blocks-buttons.css', '/css/MuseStaff.css'],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',

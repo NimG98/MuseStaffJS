@@ -1,0 +1,263 @@
+/* MuseStaff */
+/* @import url(//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT); */
+@font-face {font-family: "Engravers MT";
+    src: url("src/fonts/3135c98efb051f346203c2f2ed708638.eot"); /* IE9*/
+    src: url("src/fonts/3135c98efb051f346203c2f2ed708638.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("src/fonts/3135c98efb051f346203c2f2ed708638.woff2") format("woff2"), /* chrome、firefox */
+    url("src/fonts/3135c98efb051f346203c2f2ed708638.woff") format("woff"), /* chrome、firefox */
+    url("src/fonts/3135c98efb051f346203c2f2ed708638.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url("src/fonts/3135c98efb051f346203c2f2ed708638.svg#Engravers MT") format("svg"); /* iOS 4.1- */
+}
+
+.museStaffPropertySection {
+    /* width:100%;
+    height:100%; */
+    /* align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex; */
+    display: inline;
+}
+
+.clefDisplay {
+    position: absolute;
+    width:60px;
+    height:200px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+    margin-top: 50px;
+
+}
+
+.clefImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.timeSignatureDisplay {
+    margin-top: 100px;
+    position: absolute;
+    margin-left: 70px;
+}
+
+.timeSignatureDisplay p {
+    font-family: "Engravers MT";
+    font-size: 60px;
+    margin-top: -10px;
+    margin-bottom: -20px;
+    text-align: center;
+}
+
+.staffPropertyLinesSection {
+    margin-right: 20px;
+    width: 100px;
+    height: 100px;
+    border-collapse: collapse;
+    display: inline-table;
+}
+
+.staffPropertyLinesSection tr .museMeasureLine {
+    width: 120%;
+    border-top: 1px solid black;
+    position: absolute;
+    left: 0;
+}
+
+.staffPropertyLinesSection tr {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    height: 20px;
+    position: relative;
+}
+
+.staffPropertyLinesSection td {
+    width: 100%;
+    height: 100%;
+}
+
+.noteSelectorDisplay{
+    margin-bottom: 20px;
+}
+
+.noteSelectorHeader{
+    margin: 0px;
+    margin-left: 100px;
+}
+
+.noteSelector {
+    display: flex;
+    width: 300px;
+    height: 50px;
+    border: 2px solid #EFDAFF;
+    margin-left: 100px;
+    /* margin-top: 30px; */
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+}
+
+.noteSelector .museStaffNote:hover {
+    /* background: rgba(201, 173, 173, 0.301); */
+    filter: brightness(0.9) invert(.7) sepia(.5) hue-rotate(100deg) saturate(200%);
+}
+
+.noteSelector .museStaffNoteImage {
+    max-width: 100%;
+    max-height: 100%;
+    margin-top: 0px;
+}
+
+.noteSelectorHighlighted {
+    background: rgba(201, 173, 173, 0.301);
+}
+
+
+/* Measure */
+.museMeasure {
+    width: 500px;
+    height: 500px;
+    border-collapse: collapse;
+    display: inline-table;
+}
+
+.museMeasure tr .museMeasureLine {
+    width: 100%;
+    border-top: 1px solid black;
+    position: absolute;
+    left: 0;
+}
+
+.museMeasure tr {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    height: 20px;
+    position: relative;
+}
+
+.museMeasure td {
+    width: 100%;
+    height: 100%;
+}
+
+.highlighted * {
+    filter: brightness(0.9) invert(.7) sepia(.5) hue-rotate(100deg) saturate(200%);
+    z-index: -1;
+}
+
+.highlighted .museStaffNoteImage {
+    z-index: -1;
+}
+
+.highlighted .museStaffNoteLineImage {
+    z-index: -1;
+}
+
+.highlighted .museStaffNoteDotImage {
+    z-index: -1;
+}
+
+.tdHidden {
+    display: none;
+}
+
+.endMeasureLine {
+    border-right: 1px solid black;
+}
+
+.museMeasurePointerContainer {
+    padding-top: 50px;
+}
+
+.museMeasurePointerContainer td:not(.tdHidden) {
+    position: relative;
+    max-width:100%;
+    max-height:100%;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+.museMeasurePointerImage {
+    position: absolute;
+    width: 40px;
+    height: 150%;
+}
+
+/* Note */
+.museStaffNote {
+    position: relative;
+    width:100%;
+    height:100%;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+.museStaffNoteImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.museStaffNoteLineImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.museStaffNoteDotImage {
+    position: absolute;
+    /* top: 0;
+    left: 0; */
+    z-index:0;
+    margin-top: -40px;
+    max-width:200%;
+    max-height:400%;
+}
+
+.rotate180 {
+    transform: rotate(180deg) translate(-100%, -100%);
+    -webkit-transform: rotate(180deg) translate(-100%, -100%);
+    -ms-transform: rotate(180deg) translateX(-100%, -100%);
+    margin-left: -100px;
+    margin-top: -120px;
+}
+
+/* For downward stem 8th and 16th notes that you can't rotate the original downward stem note for,
+since the flag of the note will be in the wrong direction
+*/
+.rotate180Image {
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.vertReflect {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+}
+
+.restImage {
+    margin-top: -40px;
+    max-width: 100%;
+}
+
+.wholeNoteImage {
+    margin-top: 0px;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MuseStaff.js Examples</title>
+        <!-- <script defer type="text/javascript" src='src/constants/noteShapes.js'></script>
+        <script defer type="text/javascript" src='src/constants/notes.js'></script> -->
+        <!-- <script defer type="text/javascript" src='src/Measure.js'></script> -->
+        <!-- <script defer type="text/javascript" src='src/TimeSignature.js'></script>
+        <script defer type="text/javascript" src='src/Note.js'></script> -->
+        <!-- <link rel="stylesheet" type="text/css" href="src/Measure.css">
+        <link rel="stylesheet" type="text/css" href="src/Note.css">
+        <link rel="stylesheet" type="text/css" href="src/MuseStaff.css">
+        <link rel="stylesheet" type="text/css" href="examples.css"> -->
+        <!-- <script defer type="text/javascript" src='src/MuseStaff.js'></script> -->
+        <link rel="stylesheet" type="text/css" href="MuseStaff.css">
+        <script defer type="text/javascript" src='MuseStaff.js'></script>
+        <script defer type="text/javascript" src='examples.js'></script>
+        <!-- <link href="//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT" rel="stylesheet" type="text/css"/>  -->
+    </head>
+    <body>
+        <h1>MuseStaff Creation</h1>
+            <h2>Time Signature</h2>
+                <h3>Default Creation</h3>
+                    <p>When a time signature is not passed into the constructor for MuseStaff(), the default time signature "4/4" is used.</p>
+                    <div class="exampleTimeSig1"></div>
+                    <code>
+                        const example1 = document.querySelector(".exampleTimeSig1");
+                        const staff = new MuseStaff();
+                        staff.addMeasure();
+                        example1.appendChild(staff.staff)
+                    </code>
+                <h3>Specifying a time signature</h3>
+
+            <h2>Setting default notes</h2>
+
+    </body>
+</html>
