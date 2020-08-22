@@ -4,7 +4,7 @@ title: Getting Started
 sidebar_label: Getting Started
 ---
 
-## Download
+## Library
 
 View the latest release of [MuseStaffJS](https://github.com/csc309-summer-2020/js-library-gillnimr).
 
