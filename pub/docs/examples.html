@@ -13,26 +13,152 @@
         <link rel="stylesheet" type="text/css" href="src/MuseStaff.css">
         <link rel="stylesheet" type="text/css" href="examples.css"> -->
         <!-- <script defer type="text/javascript" src='src/MuseStaff.js'></script> -->
-        <link rel="stylesheet" type="text/css" href="MuseStaff.css">
-        <script defer type="text/javascript" src='MuseStaff.js'></script>
-        <script defer type="text/javascript" src='examples.js'></script>
+        <link rel="stylesheet" type="text/css" href="css/MuseStaff.css">
+        <script defer type="text/javascript" src='js/MuseStaff.js'></script>
+        <script defer type="text/javascript" src='js/examples.js'></script>
         <!-- <link href="//db.onlinewebfonts.com/c/3135c98efb051f346203c2f2ed708638?family=Engravers+MT" rel="stylesheet" type="text/css"/>  -->
     </head>
     <body>
-        <h1>MuseStaff Creation</h1>
-            <h2>Time Signature</h2>
-                <h3>Default Creation</h3>
-                    <p>When a time signature is not passed into the constructor for MuseStaff(), the default time signature "4/4" is used.</p>
-                    <div class="exampleTimeSig1"></div>
+        <h1>Examples</h1>
+            <h2>MuseStaff Creation</h2>
+                <p>To initiate a <code>MuseStaff</code> object, you must call the <code class="constructorText">MuseStaff(<em>timeSignature</em>) constructor</code></p>
+                <p>However, there are two ways in calling the constructor and defining the staff's time signature:</p>
+                <h3>Time Signature</h3>
+                    <h4>Default Creation</h4>
+                        <p>When a time signature is not passed into the constructor for <code>MuseStaff()</code>, the default time signature "4/4" is used.</p>
+                        <p>The staff is created with a default set of <em>Rest</em> notes. Since the time signature is "4/4", this means that a total
+                        of 4 quarter notes is allowed in one Measure.
+                        </p>
+                        <div class="exampleTimeSig1"></div>
+                        <pre>
+                        <code>
+        const example1 = document.querySelector(".exampleTimeSig1");
+        const staff = new MuseStaff();
+        staff.addMeasure();
+        example1.appendChild(staff.staff)
+                        </code>
+                        </pre>
+                    <h4>Specifying a time signature</h4>
+                        <p>When a time signature is passed into the constructor for <code>MuseStaff()</code>, it is verified if the time signature is valid and is supported by the library.</p>
+                        <p>Since the time signature is "3/8", this means that a total of 3 eighth notes is allowed in one Measure.</p>
+                        <div class="exampleTimeSig2"></div>
+                        <pre>
+                        <code>
+        const example2 = document.querySelector(".exampleTimeSig2");
+        const staff = new MuseStaff("3/8");
+        staff.addMeasure();
+        example2.appendChild(staff.staff)
+                        </code>
+                        </pre>
+                <h3>Setting default notes</h3>
+                    <p>Instead of creating a staff with a measure filled with default rests, you can use the <code>MuseStaff.setNotes(<em>notes</em>)</code> method.</p>
+                    <p>The parameter <em>notes</em> is an array of <code>Note()</code> (or <code>Rest()</code>) objects. These notes are then set as the default notes in the staff.</p>
+                    <p>Since the provided list of notes is too much to fit inside one of this staff's measures, a new measure was added to the staff to fit the remaining notes.</p>
+                    <div class="exampleSetNotes"></div>
+                    <pre>
                     <code>
-                        const example1 = document.querySelector(".exampleTimeSig1");
-                        const staff = new MuseStaff();
-                        staff.addMeasure();
-                        example1.appendChild(staff.staff)
+        const example3 = document.querySelector(".exampleSetNotes");
+        const notes = [new Note("F4", "quarter"), new Note("D5", "sixteenth"), new Note("A5", "half"), new Note("B3", "quarter"), new Rest("eighth"), new Note("B4", "whole")]
+        const staff = new MuseStaff("5/4");
+        staff.setNotes(notes);
+        example3.appendChild(staff.staff);
                     </code>
-                <h3>Specifying a time signature</h3>
+                    </pre>
+            <h2>Dynamically Edit MuseStaff</h2>
+                <p>You can dynamically insert notes into a <code>MuseStaff</code> by using "edit-mode".</p>
+                <p>If <code>MuseStaff.editable</code> is true, notes on the staff can be selected, and you can choose to insert a note from a selection of note values.</p>
+                <p>A pointer will be placed on the measure indicating the current selected note, which will also be where new notes are added.</p>
 
-            <h2>Setting default notes</h2>
+                <h3>When to call <code>MuseStaff.setEditable(<em>editable</em>)</code></h3>
+                    <p>To set <code>MuseStaff.editable</code> to true, call <code>MuseStaff.setEditable(<em>true</em>)</code>.</p>
+                    <p>After you instantiate the <code>MuseStaff</code>, if you call <code>MuseStaff.setEditable(<em>true</em>)</code> before you add new measures to the staff,
+                        the pointer will initially point at the first note of the last measure added to the staff.</p>
+                    <p>And each time a new measure is added, the pointer will always move to the last measure added:</p>
+                    <p>Try pressing the button to add a new measure to the staff and observing the pointer's location.</p>
+                    <button class="buttonAddNewMeasure">Add new measure</button><div class="exampleEditAddMeasure1"></div>
+                    <pre>
+                    <code>
+            const example4 = document.querySelector(".exampleEditAddMeasure1");
+            var staff = new MuseStaff();
+            staff.setEditable(true);
+            staff.addMeasure();
+            staff.addMeasure();
+            example4.appendChild(staff.staff);
+                    </code>
+                    </pre>
 
+                    <p>But, if you call <code>MuseStaff.setEditable(<em>true</em>)</code> after you add the desired number of empty measures to the staff,
+                        the pointer will point at the first note of the first measure in the staff:</p>
+                    <div class="exampleEditAddMeasure2"></div>
+                    <pre>
+                    <code>
+            const example5 = document.querySelector(".exampleEditAddMeasure2");
+            var staff = new MuseStaff();
+            staff.addMeasure();
+            staff.addMeasure();
+            staff.setEditable(true);
+            example5.appendChild(staff.staff);
+                    </code>
+                    </pre>
+                <h3>Inserting notes</h3>
+                    <p>On the selected position where the pointer is, if you add a note, you replace the note/rest that was in that current position.</p>
+                    <p>When your adding a note at the current position, you can hover your mouse up and down the same line where the pointer is.
+                    You can see that the staff highlights where you can add a note. These locations refer to the musical note pitch values (e.g. "B3").
+                    Once you click on one of the spaces, your note is added!</p>
+                    <p>Also, a selector box appears (under the "Notes:" heading) when you are in "edit-mode".
+                        You can select which type of note that you want to add (i.e. "quarter" note, "half" note, etc.)
+                    </p>
+                    <p>Try playing around with adding some notes, and choosing different notes!</p>
+                    <div class="exampleInsertNotes1"></div>
+                    <pre>
+                    <code>
+            const example6 = document.querySelector(".exampleInsertNotes1");
+            var staff = new MuseStaff("6/4");
+            staff.addMeasure();
+            staff.addMeasure();
+            staff.setEditable(true);
+            example6.appendChild(staff.staff);
+                    </code>
+                    </pre>
+                    <h4>Filling the remainder with rests</h4>
+                    <p>Try adding a quarter note at each Rest that is first:</p>
+                    <p>You will see that since a quarter note replaced a half rest (which is bigger),
+                        the staff needed to fill the staff with the remainder rests to fill up the measure according to the time signature.</p>
+                    <p>Also, when a note is added you can see subsequent notes are pushed backwards/forwards to fill up the measure accordingly.</p>
+                    <div class="exampleInsertNotes2"></div>
+                    <pre>
+                    <code>
+            const example7 = document.querySelector(".exampleInsertNotes2");
+            var staff = new MuseStaff("2/2");
+            staff.setEditable(true);
+            staff.addMeasure();
+            example7.appendChild(staff.staff);
+                    </code>
+                    </pre>
+                    <h4>Overflow</h4>
+                    <p>Try adding a half note at the last position of the measure. 
+                        You will see that a half note will not fit there, and so a new measure is created to fit the half note.</p>
+                    <div class="exampleOverflow1"></div>
+                    <pre>
+                    <code>
+            const example8 = document.querySelector(".exampleOverflow1");
+            var staff = new MuseStaff("5/4");
+            staff.setEditable(true);
+            staff.addMeasure();
+            example8.appendChild(staff.staff);
+                    </code>
+                    </pre>
+                    <p>Sometimes the time signature of a staff might not allow certain note types to be inserted.</p>
+                    <p>For example, try adding a quarter note or higher to the following staff with the "2/16" time signature.</p>
+                    <div class="exampleOverflow2"></div>
+                    <pre>
+                    <code>
+            const example9 = document.querySelector(".exampleOverflow2");
+            var staff = new MuseStaff("2/16");
+            staff.setEditable(true);
+            staff.addMeasure();
+            example.appendChild(staff.staff);
+                    </code>
+                    </pre>
     </body>
 </html>
