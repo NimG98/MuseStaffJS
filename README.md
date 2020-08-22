@@ -1,7 +1,10 @@
 # js-library-gillnimr
 
-MuseStaffJS Landing Page: https://calm-coast-64479.herokuapp.com/examples.html 
+MuseStaffJS Landing Page: https://calm-coast-64479.herokuapp.com/examples.html
+
 MuseStaffJS Documentation: https://calm-coast-64479.herokuapp.com/docs/museStaffDoc1/
+
+# Getting Started
 
 ## Library
 
