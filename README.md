@@ -1,8 +1,12 @@
-MuseStaffJS Landing Page: https://calm-coast-64479.herokuapp.com/
+# MuseStaffJS Overview
 
-# Getting Started
+Landing Page: https://calm-coast-64479.herokuapp.com/
 
 ![](captured.gif)
+
+Example Usage: https://calm-coast-64479.herokuapp.com/docs/examples.html
+
+# Getting Started
 
 ## Loading the modules
 
