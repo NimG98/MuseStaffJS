@@ -8,7 +8,7 @@ sidebar_label: Methods
 
 ### <span class="docsMethodNameTitle">addMeasure</span>
 
-Creates a new [Measure](measureDoc.html) and adds it to the staff. If *`measureIndex`* is provided, insert the measure into the staff at that index. Otherwise, insert the measure at the end of the staff.
+Creates a new [Measure](/docs/measureDoc) and adds it to the staff. If *`measureIndex`* is provided, insert the measure into the staff at that index. Otherwise, insert the measure at the end of the staff.
 
 #### Syntax
 
@@ -19,12 +19,12 @@ Creates a new [Measure](measureDoc.html) and adds it to the staff. If *`measureI
 
 | Parameter | Description | Required | 
 | --- | --- | --- | 
-| <em>measureIndex</em> | Index to insert [Measure](measureDoc.html) object into `MuseStaff.measures` | Optional | 
+| <em>measureIndex</em> | Index to insert [Measure](/docs/measureDoc) object into `MuseStaff.measures` | Optional | 
 
 
 ### <span class="docsMethodNameTitle">setNotes</span>
 
-Set the staff's notes to be the ones provided in the array of [Note](noteDoc.html) objects, `notes`.
+Set the staff's notes to be the ones provided in the array of [Note](/docs/noteDoc) objects, `notes`.
 If the staff is not empty (i.e. filled with notes beforehand), then the staff is emptied before setting the staff's notes to the ones in `notes`. 
 
 #### Syntax
@@ -36,13 +36,13 @@ If the staff is not empty (i.e. filled with notes beforehand), then the staff is
 
 | Parameter | Description | Required | 
 | --- | --- | --- | 
-| <em>notes</em> | Array of [Note](noteDoc.html) objects to be placed in the staff. | Required | 
+| <em>notes</em> | Array of [Note](/docs/noteDoc) objects to be placed in the staff. | Required | 
 
 ### <span class="docsMethodNameTitle">setEditable</span>
 
 Set the staff to be editable or not.
 If the staff is editable, (i.e. in "edit-mode"), the staff can be clicked to insert and modify notes.
-Otherwise, the staff just displays the current notes in the staff's [Measure](measureDoc.html) objects.
+Otherwise, the staff just displays the current notes in the staff's [Measure](/docs/measureDoc) objects.
 
 #### Syntax
 
