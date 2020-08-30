@@ -2,6 +2,8 @@ MuseStaffJS Landing Page: https://calm-coast-64479.herokuapp.com/
 
 # Getting Started
 
+![](captured.gif)
+
 ## Loading the modules
 
 Load `MuseStaff.js` into your HTML with a `<script>` tag:
