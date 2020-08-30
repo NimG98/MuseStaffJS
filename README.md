@@ -4,6 +4,8 @@ Landing Page: https://calm-coast-64479.herokuapp.com \
 Documentation: https://calm-coast-64479.herokuapp.com/docs/museStaffDoc1 \
 Example Usage: https://calm-coast-64479.herokuapp.com/docs/examples.html
 
+MuseStaffJS is a front-end JavaScript library for displaying and modifying musical staves. 
+
 ![](captured.gif)
 
 # Getting Started
