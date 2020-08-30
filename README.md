@@ -1,8 +1,19 @@
-MuseStaffJS Landing Page: https://mighty-hollows-85822.herokuapp.com/
+# MuseStaffJS 
 
-# Getting Started
+## Overview
+
+MuseStaffJS is a front-end JavaScript library for displaying and modifying musical staves. 
 
 ![](captured.gif)
+
+## Documentation and Examples
+**Landing Page**: https://mighty-hollows-85822.herokuapp.com \
+**Documentation**: https://mighty-hollows-85822.herokuapp.com/docs/museStaffDoc1 \
+**Example Usage**: https://mighty-hollows-85822.herokuapp.com/docs/examples.html
+
+Site was created using [Docusaurus](https://docusaurus.io/).
+
+# Getting Started
 
 ## Loading the modules
 
