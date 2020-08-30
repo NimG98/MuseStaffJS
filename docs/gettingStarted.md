@@ -6,7 +6,7 @@ sidebar_label: Getting Started
 
 ## Library
 
-View the latest release of [MuseStaffJS](https://github.com/csc309-summer-2020/js-library-gillnimr).
+View the latest release of [MuseStaffJS](https://github.com/NimG98/MuseStaffJS).
 
 ## Loading the modules
 
@@ -25,7 +25,7 @@ Make sure to include css stylesheet as well:
 
 ## Done
 
-Now you can call the [API methods](museStaffDoc2.html) on the `MuseStaff` object!
+Now you can call the [API methods](/docs/museStaffDoc2) on the `MuseStaff` object!
 
 ```
 const staff = new MuseStaff();

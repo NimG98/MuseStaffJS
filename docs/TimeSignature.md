@@ -8,7 +8,7 @@ sidebar_label: Time Signature
 
 Creates a new `TimeSignature` object. If the parameters `beatsPerMeasure` and `beatUnit` do not make up a valid time signature or a supported time signature, then an error is thrown and the `TimeSignature` object is not created.
 
-The `TimeSignature` object is used by the [MuseStaff](museStaffDoc1) object to determine the number and unit of notes allowed in one of its measures. The [Measure](measureDoc.html) object stores a certain number of notes that can fit in a measure,
+The `TimeSignature` object is used by the [MuseStaff](/docs/museStaffDoc1) object to determine the number and unit of notes allowed in one of its measures. The [Measure](/docs/measureDoc) object stores a certain number of notes that can fit in a measure,
 based on the time signature. For example, a time signature of "4/4" means that 4
 quarter notes can fit in the Measure, but 5 quarter notes cannot for instance.
 

@@ -25,10 +25,10 @@ All the global options available.
 
 | Property | Default | Type | Description |
 | --- | --- | --- | --- |
-| <strong class="docsClassOptionNames">timeSig</strong>  | `TimeSignature(4,4)` | [TimeSignature](timeSigDoc.html) | The time signature for the staff. Restricts the number and size of notes allowed in each measure of the staff.|
+| <strong class="docsClassOptionNames">timeSig</strong>  | `TimeSignature(4,4)` | [TimeSignature](/docs/timeSigDoc) | The time signature for the staff. Restricts the number and size of notes allowed in each measure of the staff.|
 | <strong class="docsClassOptionNames">editable</strong> | false | boolean | If the staff is in "edit-mode", where you can dynamically click the staff to add notes.|
-| <strong class="docsClassOptionNames">measures</strong> | [ ] | Array[[Measure](measureDoc.html)] | Array of all the measures in the staff. The order of the [Measure](measureDoc.html) objects correspond to the order of the measures displayed in the staff. |
-| <strong class="docsClassOptionNames">measurePointedOn</strong> | null | [Measure](measureDoc.html) | If the staff is editable, the staff has a reference to which measure and note the pointer is positioned at. |
+| <strong class="docsClassOptionNames">measures</strong> | [ ] | Array[[Measure](/docs/measureDoc)] | Array of all the measures in the staff. The order of the [Measure](/docs/measureDoc) objects correspond to the order of the measures displayed in the staff. |
+| <strong class="docsClassOptionNames">measurePointedOn</strong> | null | [Measure](/docs/measureDoc) | If the staff is editable, the staff has a reference to which measure and note the pointer is positioned at. |
 | <strong class="docsClassOptionNames">staff</strong> | null | `<div class="museStaff">` | The staff display element. |
 | <strong class="docsClassOptionNames">insertNoteType</strong> | "quarter" | String | The unit type of the current note that is selected to be inserted while in "edit-mode". `MuseStaff.insertNoteType` can be one of the following: "whole", "half", "quarter", "eighth", "sixteenth". |
 
