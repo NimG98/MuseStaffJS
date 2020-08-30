@@ -1,4 +1,4 @@
-MuseStaffJS Landing Page: https://calm-coast-64479.herokuapp.com/
+MuseStaffJS Landing Page: https://mighty-hollows-85822.herokuapp.com/
 
 # Getting Started
 
